@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,37 +30,38 @@ public class BankController {
 
         return new ResponseEntity<Collection<Client>>(clients, HttpStatus.OK);
     }
-/*
+
     @RequestMapping(
-            value = "/mypoints/delete/{id}",
+            value = "/client/delete/{id}",
             method = RequestMethod.DELETE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Point> deletePoint(@PathVariable("id") Integer id, @RequestBody Point point) {
+    public ResponseEntity<Client> deleteClient(@PathVariable("id") Integer id, @RequestBody Client client) {
 
         clientService.delete(id);
-        return new ResponseEntity<Point>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(
-            value = "/mypoints/update/{id}",
+            value = "/client/update/{id}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Point> updatePoints(@RequestBody Point upDatePoint, @PathVariable("id") Integer id) {
+    public ResponseEntity<Client> updateClient(@RequestBody Client upDateClient, @PathVariable("id") Integer id) {
 
-        Point point = clientService.update(upDatePoint,id);
-        if(point == null) {
-            return  new ResponseEntity<Point>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Client client = clientService.update(upDateClient,id);
+
+        if(client == null) {
+            return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Point>(point, HttpStatus.NO_CONTENT);
-    }*/
+        return new ResponseEntity<Client>(client, HttpStatus.NO_CONTENT);
+    }
 
     @RequestMapping(
             value = "/new/client",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Client> createPoint(@RequestBody Client newClient) {
+    public ResponseEntity<Client> createClient(@RequestBody Client newClient) {
 
         clientService.create(newClient);
         return new ResponseEntity<Client>(newClient, HttpStatus.CREATED);

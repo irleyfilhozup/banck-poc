@@ -5,6 +5,8 @@ package com.example.bankpoc.models;
 import com.example.bankpoc.util.DateHour;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
 
@@ -12,15 +14,14 @@ import java.sql.Date;
 public class Client {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer id_account;
 	private String name;
 	private String cpf;
 	private Date date_creation;
 
-	public Client(){
-
-	}
+	public Client(){}
 	
 	public Client(String name, String cpf, Date date_creation) {
 		
@@ -81,7 +82,4 @@ public class Client {
 		}
 		return ""+this.id_account;
 	}
-	
-	
-
 }

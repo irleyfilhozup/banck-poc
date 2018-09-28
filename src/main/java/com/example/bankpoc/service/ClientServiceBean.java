@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 @Transactional(
@@ -27,21 +28,35 @@ public class ClientServiceBean implements ClientService {
 
     @Override
     public Client findOne(int id) {
-        return null;
+
+        Optional<Client> client = clientRepository.findById(id);
+        return client.get();
     }
 
     @Override
-    public Client create(Client point) {
-        return null;
+    public Client create(Client newClient) {
+
+        Client client = clientRepository.save(newClient);
+        return client;
     }
 
     @Override
-    public Client update(Client point, Integer id) {
-        return null;
+    public Client update(Client client, Integer id) {
+
+        Optional<Client> clientUpDate = clientRepository.findById(id);
+
+        if (clientUpDate.get()==null) {
+            return null;
+        }
+
+        client.setId(id);
+        Client clientPersisted = clientRepository.save(client);
+        return clientPersisted;
+
     }
 
     @Override
     public void delete(int id) {
-
+        clientRepository.deleteById(id);
     }
 }

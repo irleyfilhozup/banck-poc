@@ -1,7 +1,9 @@
 package com.example.bankpoc.service;
 
+import com.example.bankpoc.exception.ClientNotExistsException;
 import com.example.bankpoc.models.Client;
 import com.example.bankpoc.repository.ClientRepository;
+import com.example.bankpoc.validation.Validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,42 +23,53 @@ public class ClientServiceBean implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    private Validation validation;
+
     @Override
     public Collection<Client> findAll() {
+
         return clientRepository.findAll();
     }
 
     @Override
-    public Client findOne(int id) {
+    public Client findOne(int id) throws ClientNotExistsException {
 
         Optional<Client> client = clientRepository.findById(id);
+        if (null == client || !client.isPresent()) {
+            throw new ClientNotExistsException();
+        }
         return client.get();
     }
 
     @Override
-    public Client create(Client newClient) {
+    public String create(Client newClient) {
+        try{
+            validation.validClient(newClient);
+        } catch (RuntimeException error){
+            return error.getMessage();
+        }
 
         Client client = clientRepository.save(newClient);
-        return client;
+        return "Cliente Cadastrado!!";
     }
 
     @Override
-    public Client update(Client client, Integer id) {
-
-        Optional<Client> clientUpDate = clientRepository.findById(id);
-
-        if (clientUpDate.get()==null) {
-            return null;
+    public String update(Client client, Integer id) {
+        try {
+            validation.validClientUpDdate(client, id);
+        }
+        catch (RuntimeException error) {
+            return error.getMessage();
         }
 
         client.setId(id);
         Client clientPersisted = clientRepository.save(client);
-        return clientPersisted;
-
+        return "Cliente editado com sucesso";
     }
 
     @Override
     public void delete(int id) {
+
         clientRepository.deleteById(id);
     }
 }

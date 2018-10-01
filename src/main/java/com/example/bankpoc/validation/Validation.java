@@ -32,13 +32,13 @@ public class Validation {
     }
 
     private boolean clientExists(Client client) throws ClientExistsException {
-
+/*
         Collection<Client> clients = clientService.findAll();
         for(Client clientList : clients) {
             if(clientList.getCpf().equals(client.getCpf())) {
                 throw new ClientExistsException(client.getName(), client.getCpf());
             }
-        }
+        }*/
         return true;
     }
 

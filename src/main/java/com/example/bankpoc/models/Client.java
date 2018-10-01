@@ -4,11 +4,16 @@ package com.example.bankpoc.models;
 
 import com.example.bankpoc.util.DateHour;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Client {
@@ -16,14 +21,17 @@ public class Client {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
 	private Integer id_account;
 	private String name;
 	private String cpf;
-	private Date date_creation;
+
+
+	private Timestamp date_creation;
 
 	public Client(){}
 	
-	public Client(String name, String cpf, Date date_creation) {
+	public Client(String name, String cpf, Timestamp date_creation) {
 		
 		this.name = name;
 		this.cpf = cpf;
@@ -60,11 +68,11 @@ public class Client {
 		this.cpf = cpf;
 	}
 
-	public Date getDate_creation() {
+	public Timestamp getDate_creation() {
 		return date_creation;
 	}
 
-	public void setDate_creation(Date date_creation) {
+	public void setDate_creation(Timestamp date_creation) {
 		this.date_creation = date_creation;
 	}
 	

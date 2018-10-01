@@ -10,9 +10,9 @@ public interface ClientService {
 
     Client findOne(int id);
 
-    String create(Client point);
+    Client create(Client newClient);
 
-    String update(Client point, Integer id);
+    Client update(Client clientUpDate, Integer id);
 
     void delete(int id);
 }

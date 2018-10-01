@@ -5,17 +5,37 @@ package com.example.bankpoc.models;
 import com.example.bankpoc.util.DateHour;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.apache.tomcat.jni.Time;
+
+@Entity
 public class Transfer {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+
 	private Integer id_account_source;
 	private Integer id_destination_account;
 	private double value;
-	private Date date;
+	private Timestamp date;
 	
-	public Transfer(Integer id_account_source, Integer id_destination_account, double value, Date date) {
+	public Transfer(Integer id_account_source, Integer id_destination_account, double value, Timestamp date) {
 		this.id_account_source = id_account_source;
+		this.id_destination_account = id_destination_account;
+		this.value = value;
+		this.date = date;
+	}
+
+	public Transfer(Integer id_destination_account, double value, Timestamp date) {
+		this.id_account_source = 1;
 		this.id_destination_account = id_destination_account;
 		this.value = value;
 		this.date = date;
@@ -53,11 +73,11 @@ public class Transfer {
 		this.value = value;
 	}
 	
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 	

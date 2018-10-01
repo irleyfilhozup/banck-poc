@@ -23,7 +23,7 @@ public class ClientServiceBean implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    private Validation validation;
+    private Validation validation = new Validation();
 
     @Override
     public Collection<Client> findAll() {
@@ -42,34 +42,32 @@ public class ClientServiceBean implements ClientService {
     }
 
     @Override
-    public String create(Client newClient) {
-        try{
-            validation.validClient(newClient);
-        } catch (RuntimeException error){
-            return error.getMessage();
-        }
+    public Client create(Client newClient) throws RuntimeException {
 
         Client client = clientRepository.save(newClient);
-        return "Cliente Cadastrado!!";
+        return client;
     }
 
     @Override
-    public String update(Client client, Integer id) {
-        try {
-            validation.validClientUpDdate(client, id);
-        }
-        catch (RuntimeException error) {
-            return error.getMessage();
-        }
+    public Client update(Client clientUpDate, Integer id) {
 
-        client.setId(id);
-        Client clientPersisted = clientRepository.save(client);
-        return "Cliente editado com sucesso";
+        Optional<Client> clientPersisted = clientRepository.findById(id);
+
+        if (null == clientPersisted || !clientPersisted.isPresent()) {
+            throw new ClientNotExistsException();
+        }
+        clientUpDate.setId(id);
+        Client client = clientRepository.save(clientUpDate);
+        return client;
     }
 
     @Override
     public void delete(int id) {
+        Optional<Client> clientPersisted = clientRepository.findById(id);
 
+        if (null == clientPersisted || !clientPersisted.isPresent()) {
+            throw new ClientNotExistsException();
+        }
         clientRepository.deleteById(id);
     }
 }

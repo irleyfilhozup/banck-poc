@@ -1,5 +1,7 @@
 package com.example.bankpoc.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,14 +37,12 @@ public class TransferServiceBean implements TransferService {
     public Transfer deposit(int idRecipient, double value) {
 
         Client clientRecipient = clientService.findOne(idRecipient);
-
         Account accountRecipient = accountService.findOne(clientRecipient.getId_account());
 
         Transfer transfer = transactionsBank.deposit(accountRecipient, value);
+        transferRepository.save(transfer);
 
         accountService.update(accountRecipient, clientRecipient.getId_account());
-
-        transferRepository.save(transfer);
 
         return transfer;
     }
@@ -64,4 +64,40 @@ public class TransferServiceBean implements TransferService {
 
         return transfer;
     }
+
+    @Override
+    public Transfer cashOut(int idClient, double value) {
+
+        Client client = clientService.findOne(idClient);
+        Account account = accountService.findOne(client.getId_account());
+
+        Transfer transfer = transactionsBank.cashOut(account, value);
+        transferRepository.save(transfer);
+
+        accountService.update(account, client.getId_account());
+
+        return transfer;
+    }
+
+    @Override
+    public String getBalance(int idClient) {
+
+        Client client = clientService.findOne(idClient);
+        Account account = accountService.findOne(client.getId_account());
+
+        String balance = transactionsBank.getBalance(account);
+
+
+        return balance;
+    }
+
+    @Override
+    public Collection<Transfer> getTransfers(Integer id) {
+        Client client = clientService.findOne(id);
+        Account account = accountService.findOne(client.getId_account());
+        Collection<Transfer> transfers = transferRepository.findByTransactionWithId(account.getId());
+        return transfers;
+    }
+
+
 }

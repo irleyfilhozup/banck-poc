@@ -26,19 +26,25 @@ public class Transfer {
 	private Integer id_destination_account;
 	private double value;
 	private Timestamp date;
+	private String type_transfer;
+
+	public Transfer(){}
 	
-	public Transfer(Integer id_account_source, Integer id_destination_account, double value, Timestamp date) {
+	public Transfer(Integer id_account_source, Integer id_destination_account, double value, Timestamp date,
+			TypeTransfer type_transfer) {
 		this.id_account_source = id_account_source;
 		this.id_destination_account = id_destination_account;
 		this.value = value;
 		this.date = date;
+		this.type_transfer = type_transfer.name();
 	}
 
-	public Transfer(Integer id_destination_account, double value, Timestamp date) {
+	public Transfer(Integer id_destination_account, double value, Timestamp date, TypeTransfer type_transfer) {
 		this.id_account_source = 1;
 		this.id_destination_account = id_destination_account;
 		this.value = value;
 		this.date = date;
+		this.type_transfer = type_transfer.name();
 	}
 	
 	public Integer getId() {
@@ -87,6 +93,7 @@ public class Transfer {
 			   "Id Depositante: " + this.id_account_source + ".\n" +
 			   "Id Beneficiario: " + this.id_destination_account + ".\n" +
 			   "Valor Transferencia: " + this.value + ".\n" +
-			   "Data Transferencia: " + DateHour.getDate(this.date) + ".\n";
+			   "Data Transferencia: " + DateHour.getDate(this.date) + ".\n" +
+				"Tipo Transação: " + this.type_transfer;
 	}
 }

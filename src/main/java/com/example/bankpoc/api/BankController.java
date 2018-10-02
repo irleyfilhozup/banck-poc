@@ -111,4 +111,34 @@ public class BankController {
         Transfer transfer = transferService.deposit(objBodyTransfer.getIdRecipient(),objBodyTransfer.getValue());
         return new ResponseEntity<Transfer>(transfer, HttpStatus.CREATED);
     }
+
+    @GetMapping(
+            value = "/balance/{idClient}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> balance(@PathVariable("idClient") Integer idClient) {
+
+        String balance = transferService.getBalance(idClient);
+        return new ResponseEntity<String>(balance, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "cashOut",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Transfer> cashOut(@RequestBody ObjBodyTransfer objBodyTransfer) {
+
+        Transfer transfer = transferService.cashOut(objBodyTransfer.getIdDeposit(), objBodyTransfer.getValue());
+        return new ResponseEntity<Transfer>(transfer, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+            value = "accountStatement/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<Transfer>> accountStatement(@PathVariable("id") Integer id) {
+
+        Collection<Transfer> transfers = transferService.getTransfers(id);
+        return new ResponseEntity<Collection<Transfer>>(transfers, HttpStatus.OK);
+    }
 }

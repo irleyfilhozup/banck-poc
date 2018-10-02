@@ -22,6 +22,15 @@ public class Account {
 	private Integer id;
 
 	private Timestamp date_creation;
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
 	private double balance;
 
 	public Account() {}
@@ -55,7 +64,7 @@ public class Account {
 		this.balance += value;
 	}
 	
-	public void toWithdraw(double value) {
+	public void cashOut(double value) {
 		this.balance -= value;
 	}
 }

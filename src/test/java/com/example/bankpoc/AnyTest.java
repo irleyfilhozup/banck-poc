@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 public class AnyTest {
-
+/*
     @Test
     public void a() {
 
@@ -17,5 +17,5 @@ public class AnyTest {
 
         LocalDateTime date = LocalDateTime.now();
         System.out.println("Horas: " + date.getHour());
-    }
+    }*/
 }

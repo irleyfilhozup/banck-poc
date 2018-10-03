@@ -1,4 +1,4 @@
-package com.example.bankpoc.exception;
+package com.example.bankpoc.exception.client;
 
 public class ClientNotExistsException extends RuntimeException {
 

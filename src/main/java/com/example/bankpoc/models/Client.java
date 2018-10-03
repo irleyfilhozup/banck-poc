@@ -5,6 +5,7 @@ package com.example.bankpoc.models;
 import com.example.bankpoc.util.DateHour;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,8 @@ public class Client {
 
 	private Integer id_account;
 	private String name;
+
+	@Column(unique = true)
 	private String cpf;
 
 

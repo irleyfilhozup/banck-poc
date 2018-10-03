@@ -34,47 +34,32 @@ public class TransferServiceBean implements TransferService {
     TransactionsBank transactionsBank = new TransactionsBank();
 
     @Override
-    public Transfer deposit(int idRecipient, double value) {
+    public Transfer deposit(Account account, double value) {
 
-        Client clientRecipient = clientService.findOne(idRecipient);
-        Account accountRecipient = accountService.findOne(clientRecipient.getId_account());
-
-        Transfer transfer = transactionsBank.deposit(accountRecipient, value);
+        Transfer transfer = transactionsBank.deposit(account, value);
         transferRepository.save(transfer);
-
-        accountService.update(accountRecipient, clientRecipient.getId_account());
 
         return transfer;
     }
 
     @Override
-    public Transfer transferBank(int idRecipient, int idDeposit, double value) {
-
-        Client clientDeposit = clientService.findOne(idDeposit);
-        Client clientRecipient = clientService.findOne(idRecipient);
-
-        Account accountDeposit = accountService.findOne(clientDeposit.getId_account());
-        Account accountRecipient = accountService.findOne(clientRecipient.getId_account());
+    public Transfer transferBank(Account accountDeposit, Account accountRecipient, double value) {
 
         Transfer transfer = transactionsBank.transfer(accountRecipient, accountDeposit, value);
         transferRepository.save(transfer);
 
-        accountService.update(accountRecipient, clientRecipient.getId_account());
-        accountService.update(accountDeposit, clientDeposit.getId_account());
-
         return transfer;
     }
 
     @Override
-    public Transfer cashOut(int idClient, double value) {
+    public Transfer cashOut(Account account, double value) {
 
-        Client client = clientService.findOne(idClient);
-        Account account = accountService.findOne(client.getId_account());
+
 
         Transfer transfer = transactionsBank.cashOut(account, value);
         transferRepository.save(transfer);
 
-        accountService.update(account, client.getId_account());
+        accountService.update(account, account.getId());
 
         return transfer;
     }
@@ -92,10 +77,10 @@ public class TransferServiceBean implements TransferService {
     }
 
     @Override
-    public Collection<Transfer> getTransfers(Integer id) {
-        Client client = clientService.findOne(id);
-        Account account = accountService.findOne(client.getId_account());
-        Collection<Transfer> transfers = transferRepository.findByTransactionWithId(account.getId());
+    public Collection<Transfer> getTransfers(Integer idAccount) {
+
+
+        Collection<Transfer> transfers = transferRepository.findByTransactionWithId(idAccount);
         return transfers;
     }
 

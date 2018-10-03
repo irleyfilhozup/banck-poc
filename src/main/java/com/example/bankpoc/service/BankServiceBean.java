@@ -45,43 +45,15 @@ public class BankServiceBean implements   BankService {
 
     private ValidateTransactionValue validateTransactionValue = new ValidateTransactionValue();
 
-
-    @Override
-    public Collection<Account> findAllAccount() {
-        return null;
-    }
-
-    @Override
-    public Account findOneAccount(int id) {
-        return null;
-    }
-
-    @Override
-    public Account createAccount(Account newAccount) {
-        return null;
-    }
-
-    @Override
-    public Account updateAccount(Account accountUpDate, Integer id) {
-        return null;
-    }
-
-    @Override
-    public void deleteAccount(int id) {
-
-    }
-
     @Override
     public Collection<Client> findAllClient() {
         return clientService.findAll();
     }
 
     @Override
-    public Client findOneClient(int id) {
-        return null;
-    }
-
-    @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            readOnly = false)
     public Client createClient(Client newClient) {
 
 
@@ -98,6 +70,9 @@ public class BankServiceBean implements   BankService {
     }
 
     @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            readOnly = false)
     public Client updateClient(Client clientUpDate, Integer id) {
 
         Client clientPersisted = clientService.findOne(id);
@@ -128,6 +103,9 @@ public class BankServiceBean implements   BankService {
     }*/
 
     @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            readOnly = false)
     public Transfer deposit(ObjBodyDepositCashOut objBody) throws ClientNotExistsException, InvalidValueException {
 
         Client client = clientService.findOne(objBody.getIdClient());
@@ -141,6 +119,9 @@ public class BankServiceBean implements   BankService {
     }
 
     @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            readOnly = false)
     public Transfer transferBank(ObjBodyTransfer objBodyTransfer) {
 
         validateObjBodyTransfer.check(objBodyTransfer);
@@ -161,6 +142,9 @@ public class BankServiceBean implements   BankService {
     }
 
     @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            readOnly = false)
     public Transfer cashOut(ObjBodyDepositCashOut objBody) {
 
         validateTransactionValue.checkCashOut(objBody.getValue());
@@ -173,6 +157,8 @@ public class BankServiceBean implements   BankService {
 
         Transfer transfer = transferService.cashOut(account, objBody.getValue());
 
+        accountService.update(account, account.getId());
+
         return transfer;
     }
 
@@ -183,10 +169,6 @@ public class BankServiceBean implements   BankService {
         validateUpDateClient.clientExists(client);
 
         Account account = accountService.findOne(client.getId_account());
-
-        double balance = account.getBalance();
-
-        ;
         return "{ \"Balance\" : " + Double.valueOf(String.format(Locale.US, "%.2f", account.getBalance())) + " } ";
     }
 

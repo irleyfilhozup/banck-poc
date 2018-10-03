@@ -11,7 +11,6 @@ import com.example.bankpoc.models.Account;
 import com.example.bankpoc.models.Client;
 import com.example.bankpoc.models.TransactionsBank;
 import com.example.bankpoc.models.Transfer;
-import com.example.bankpoc.repository.ClientRepository;
 import com.example.bankpoc.repository.TransferRepository;
 
 
@@ -38,7 +37,6 @@ public class TransferServiceBean implements TransferService {
 
         Transfer transfer = transactionsBank.deposit(account, value);
         transferRepository.save(transfer);
-
         return transfer;
     }
 
@@ -47,20 +45,14 @@ public class TransferServiceBean implements TransferService {
 
         Transfer transfer = transactionsBank.transfer(accountRecipient, accountDeposit, value);
         transferRepository.save(transfer);
-
         return transfer;
     }
 
     @Override
     public Transfer cashOut(Account account, double value) {
 
-
-
         Transfer transfer = transactionsBank.cashOut(account, value);
         transferRepository.save(transfer);
-
-        accountService.update(account, account.getId());
-
         return transfer;
     }
 
@@ -69,9 +61,7 @@ public class TransferServiceBean implements TransferService {
 
         Client client = clientService.findOne(idClient);
         Account account = accountService.findOne(client.getId_account());
-
         String balance = transactionsBank.getBalance(account);
-
 
         return balance;
     }
@@ -79,10 +69,7 @@ public class TransferServiceBean implements TransferService {
     @Override
     public Collection<Transfer> getTransfers(Integer idAccount) {
 
-
         Collection<Transfer> transfers = transferRepository.findByTransactionWithId(idAccount);
         return transfers;
     }
-
-
 }

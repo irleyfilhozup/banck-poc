@@ -10,27 +10,12 @@ import com.example.bankpoc.models.Transfer;
 
 public interface BankService {
 
-    Collection<Account> findAllAccount();
-
-    Account findOneAccount(int id);
-
-    Account createAccount(Account newAccount);
-
-    Account updateAccount(Account accountUpDate, Integer id);
-
-    void deleteAccount(int id);
-
 
     Collection<Client> findAllClient();
-
-    Client findOneClient(int id);
 
     Client createClient(Client newClient);
 
     Client updateClient(Client clientUpDate, Integer id);
-
-   // boolean deleteClient(int id);
-
 
     Transfer deposit(ObjBodyDepositCashOut objBody);
 

@@ -4,20 +4,43 @@ package com.example.bankpoc.models;
 
 import com.example.bankpoc.exception.InvalidValueException;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
 public class Account {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Date date_creation;
+
+	private Timestamp date_creation;
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
 	private double balance;
-	
-	public Account(Date date_creation) {
+
+	public Account() {}
+
+	public Account(Timestamp date_creation) {
 		this.date_creation = date_creation;
 		this.balance = 0;		
 	}
 	
-	public Account(Date date_creation, double balance) {
+	public Account(Timestamp date_creation, double balance) {
 		this.date_creation = date_creation;
 		this.balance = balance;
 	}
@@ -41,7 +64,7 @@ public class Account {
 		this.balance += value;
 	}
 	
-	public void toWithdraw(double value) {
+	public void cashOut(double value) {
 		this.balance -= value;
 	}
 }

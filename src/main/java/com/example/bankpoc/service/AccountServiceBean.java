@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.bankpoc.models.Account;
 import com.example.bankpoc.repository.AccountRepository;
+import com.example.bankpoc.validation.ValidationDeleteClient;
 
 
 @Service
@@ -21,6 +22,8 @@ public class AccountServiceBean implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    private ValidationDeleteClient validationDeleteClient = new ValidationDeleteClient();
 
     @Override
     public Collection<Account> findAll() {
@@ -56,5 +59,12 @@ public class AccountServiceBean implements AccountService {
     @Override
     public void delete(int id) {
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public void accountValidDeleted(Account account) {
+
+        validationDeleteClient.balanceInAccount(account);
+
     }
 }

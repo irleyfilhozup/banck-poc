@@ -1,4 +1,4 @@
-package com.example.bankpoc.exception;
+package com.example.bankpoc.exception.client;
 
 @SuppressWarnings("serial")
 public class InvalidValueException extends RuntimeException {

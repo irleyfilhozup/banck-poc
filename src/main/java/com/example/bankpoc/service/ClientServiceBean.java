@@ -1,9 +1,13 @@
 package com.example.bankpoc.service;
 
-import com.example.bankpoc.exception.ClientNotExistsException;
+import com.example.bankpoc.exception.client.ClientExistsException;
+import com.example.bankpoc.exception.client.ClientNotExistsException;
+import com.example.bankpoc.exception.client.UnfilledFieldsException;
+import com.example.bankpoc.models.Account;
 import com.example.bankpoc.models.Client;
 import com.example.bankpoc.repository.ClientRepository;
-import com.example.bankpoc.validation.Validation;
+import com.example.bankpoc.validation.ValidateCreationClient;
+import com.example.bankpoc.validation.ValidationDeleteClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +27,9 @@ public class ClientServiceBean implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    private Validation validation = new Validation();
+    private ValidateCreationClient validateCreationClient = new ValidateCreationClient();
+
+    private ValidationDeleteClient validationDeleteClient = new ValidationDeleteClient();
 
     @Override
     public Collection<Client> findAll() {
@@ -49,25 +55,46 @@ public class ClientServiceBean implements ClientService {
     }
 
     @Override
-    public Client update(Client clientUpDate, Integer id) {
+    public Client update(Client clientUpDate) {
 
-        Optional<Client> clientPersisted = clientRepository.findById(id);
-
-        if (null == clientPersisted || !clientPersisted.isPresent()) {
-            throw new ClientNotExistsException();
-        }
-        clientUpDate.setId(id);
-        Client client = clientRepository.save(clientUpDate);
-        return client;
+       Client client = clientRepository.save(clientUpDate);
+       return client;
     }
 
     @Override
-    public void delete(int id) {
+    public String delete(int id) {
+
+        clientRepository.deleteById(id);
         Optional<Client> clientPersisted = clientRepository.findById(id);
 
         if (null == clientPersisted || !clientPersisted.isPresent()) {
-            throw new ClientNotExistsException();
+            return "Response: " + "Cliente não existe na base de dados.";
+
         }
-        clientRepository.deleteById(id);
+        try {
+            clientRepository.deleteById(id);
+            return "Response: " + "Cliente deletado do banco de dados.";
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+            return "Response: " + "O sistema não pode excluir o cliente.";
+        }
     }
+
+    @Override
+    public boolean clientValid(Client client) throws UnfilledFieldsException, ClientExistsException{
+
+        Client clientReturn = clientRepository.findByCpf(client.getCpf());
+        validateCreationClient.clientExists(clientReturn);
+        return true;
+    }
+
+    @Override
+    public boolean clientValidDeleted(Client client) {
+        validationDeleteClient.clientExists(client);
+        validationDeleteClient.requiredFields(client);
+        return true;
+    }
+
+
+
 }

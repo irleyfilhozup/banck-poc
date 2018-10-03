@@ -28,38 +28,38 @@ import com.example.bankpoc.service.ClientServiceBean;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BankPocApplicationTests {
-
+/*
 
 	ClientServiceBean clientService;
 
 	@Mock
 	ClientRepository clientRepository;
 
-	private List<Client> listClients;
+	private List<client> listClients;
 
 	@Before
 	public void setUp() throws Exception {
 		clientService = new ClientServiceBean();
 	}
-
+*/
 	@Test
 	public void contextLoads() {
 
 	}
-
+/*
 	@Test
 	public void testClientsDataBase() {
 
 		Mockito.when(clientService.findAll()).thenReturn(listClients);
-		Collection<Client> clients = clientService.findAll();
+		Collection<client> clients = clientService.findAll();
 		Assert.assertNotNull(clients);
 	}
 
 //	@Test
 //	public void testNewClient(){
 //
-//		Client client1 = new Client("Romario Morais", "222.222.444-55", new Date(System.currentTimeMillis()));
-//		Client clientCadas = clientService.create(client1);
+//		client client1 = new client("Romario Morais", "222.222.444-55", new Date(System.currentTimeMillis()));
+//		client clientCadas = clientService.create(client1);
 //		assertNotNull(clientCadas);
-//	}
+//	}*/
 }

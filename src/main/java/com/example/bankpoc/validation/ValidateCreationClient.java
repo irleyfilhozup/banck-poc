@@ -32,6 +32,9 @@ public class ValidateCreationClient {
             throw new UnfilledFieldsException();
         }
         else {
+            if(client.getCpf().length()<11 || client.getName().length()<1) {
+                throw new UnfilledFieldsException();
+            }
             return true;
         }
     }

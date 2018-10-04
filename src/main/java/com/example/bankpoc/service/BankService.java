@@ -13,6 +13,8 @@ public interface BankService {
 
     Collection<Client> findAllClient();
 
+    Client findById(Integer id);
+
     Client createClient(Client newClient);
 
     Client updateClient(Client clientUpDate, Integer id);
@@ -24,6 +26,8 @@ public interface BankService {
     Transfer cashOut(ObjBodyDepositCashOut objBody);
 
     String getBalance(int idClient);
+
+    boolean deleteClient(int id);
 
     Collection<Transfer> getTransfers(Integer id);
 }

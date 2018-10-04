@@ -6,6 +6,7 @@ import com.example.bankpoc.exception.client.UnfilledFieldsException;
 import com.example.bankpoc.models.Account;
 import com.example.bankpoc.models.Client;
 import com.example.bankpoc.repository.ClientRepository;
+import com.example.bankpoc.validation.ValidateClient;
 import com.example.bankpoc.validation.ValidateCreationClient;
 import com.example.bankpoc.validation.ValidationDeleteClient;
 
@@ -31,6 +32,8 @@ public class ClientServiceBean implements ClientService {
 
     private ValidationDeleteClient validationDeleteClient = new ValidationDeleteClient();
 
+    private ValidateClient validateClient = new ValidateClient();
+
     @Override
     public Collection<Client> findAll() {
 
@@ -40,11 +43,14 @@ public class ClientServiceBean implements ClientService {
     @Override
     public Client findOne(int id) throws ClientNotExistsException {
 
-        Optional<Client> client = clientRepository.findById(id);
-        if (null == client || !client.isPresent()) {
+        Optional<Client> clientOpt = clientRepository.findById(id);
+        if (null == clientOpt || !clientOpt.isPresent()) {
             throw new ClientNotExistsException();
         }
-        return client.get();
+        Client client = clientOpt.get();
+        validateClient.clientExists(client);
+
+        return client;
     }
 
     @Override

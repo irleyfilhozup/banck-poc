@@ -1,6 +1,20 @@
 package com.example.bankpoc.api;
 
 
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.bankpoc.models.Client;
 import com.example.bankpoc.models.ObjBodyDepositCashOut;
 import com.example.bankpoc.models.ObjBodyTransfer;
@@ -10,64 +24,40 @@ import com.example.bankpoc.service.BankService;
 import com.example.bankpoc.service.ClientService;
 import com.example.bankpoc.service.TransferService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collection;
-
 @RestController
 public class BankController {
 
     @Autowired
     BankService bankService;
 
-    @Autowired
-    ClientService clientService;
-
-    @Autowired
-    AccountService accountService;
-
-    @Autowired
-    TransferService transferService;
-
     @GetMapping(
             value = "/clients",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Client>> getClients() {
 
-        Collection<Client> clients= bankService.findAllClient();
+        Collection<Client> clients = bankService.findAllClient();
 
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
-  /*  @RequestMapping(
-            value = "/client/delete/{id}",
-            method = RequestMethod.DELETE,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+    @GetMapping(
+            value = "/searchClient/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteClient(@PathVariable("id") Integer id, @RequestBody Client client) {
+    public ResponseEntity<Client> getClient(@PathVariable("id") Integer id) {
 
-        bankService.deleteClient(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }*/
+        Client client = bankService.findById(id);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
 
-    @RequestMapping(
+    @PutMapping(
             value = "/client/update/{id}",
-            method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Client> updateClient(@RequestBody Client upDateClient, @PathVariable("id") Integer id) {
+    public ResponseEntity<Client> updateClient(@PathVariable("id") Integer id, @RequestBody Client upDateClient) {
 
         Client client = bankService.updateClient(upDateClient, id);
-        return new ResponseEntity<Client>(client, HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity<>(client, HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(
@@ -133,3 +123,15 @@ public class BankController {
         return new ResponseEntity<Collection<Transfer>>(transfers, HttpStatus.OK);
     }
 }
+
+
+ /*  @RequestMapping(
+            value = "/client/delete/{id}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteClient(@PathVariable("id") Integer id, @RequestBody Client client) {
+
+        bankService.deleteClient(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }*/

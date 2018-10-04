@@ -19,7 +19,7 @@ import com.example.bankpoc.models.Transfer;
 import com.example.bankpoc.validation.ValidateCreationClient;
 import com.example.bankpoc.validation.ValidateObjBodyTransfer;
 import com.example.bankpoc.validation.ValidateTransactionValue;
-import com.example.bankpoc.validation.ValidateUpDateClient;
+import com.example.bankpoc.validation.ValidateClient;
 
 @Service
 @Transactional(
@@ -37,7 +37,7 @@ public class BankServiceBean implements   BankService {
     @Autowired
     TransferService transferService;
 
-    private ValidateUpDateClient validateUpDateClient = new ValidateUpDateClient();
+    private ValidateClient validateClient = new ValidateClient();
 
     private ValidateCreationClient validateCreationClient = new ValidateCreationClient();
 
@@ -48,6 +48,11 @@ public class BankServiceBean implements   BankService {
     @Override
     public Collection<Client> findAllClient() {
         return clientService.findAll();
+    }
+
+    @Override
+    public Client findById(Integer id) {
+        return clientService.findOne(id);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class BankServiceBean implements   BankService {
 
         Client clientPersisted = clientService.findOne(id);
 
-        validateUpDateClient.clientExists(clientPersisted);
+        validateClient.clientExists(clientPersisted);
         validateCreationClient.requiredFields(clientUpDate);
 
         clientUpDate.setId(id);
@@ -85,7 +90,7 @@ public class BankServiceBean implements   BankService {
         return client;
     }
 
-   /* @Override
+    @Override
     public boolean deleteClient(int id) {
 
         Client clientDelete = clientService.findOne(id);
@@ -94,13 +99,11 @@ public class BankServiceBean implements   BankService {
         clientService.delete(id);
         accountService.delete(clientDelete.getId_account());
 
-
         Account accountDelete = accountService.findOne(clientDelete.getId_account());
         accountService.accountValidDeleted(accountDelete);
 
-
         return true;
-    }*/
+    }
 
     @Override
     @Transactional(
@@ -109,7 +112,7 @@ public class BankServiceBean implements   BankService {
     public Transfer deposit(ObjBodyDepositCashOut objBody) throws ClientNotExistsException, InvalidValueException {
 
         Client client = clientService.findOne(objBody.getIdClient());
-        validateUpDateClient.clientExists(client);
+        validateClient.clientExists(client);
         Account account = accountService.findOne(client.getId_account());
 
         Transfer transfer = transferService.deposit(account, objBody.getValue());
@@ -130,8 +133,13 @@ public class BankServiceBean implements   BankService {
         Client clientDeposit = clientService.findOne(objBodyTransfer.getIdDeposit());
         Client clientRecipient = clientService.findOne(objBodyTransfer.getIdRecipient());
 
+        validateClient.clientExists(clientDeposit);
+        validateClient.clientExists(clientRecipient);
+
         Account accountDeposit = accountService.findOne(clientDeposit.getId_account());
         Account accountRecipient = accountService.findOne(clientRecipient.getId_account());
+
+        validateTransactionValue.valueInAccount(accountDeposit, objBodyTransfer.getValue());
 
         Transfer transfer = transferService.transferBank(accountDeposit, accountRecipient, objBodyTransfer.getValue());
 
@@ -150,7 +158,7 @@ public class BankServiceBean implements   BankService {
         validateTransactionValue.checkCashOut(objBody.getValue());
 
         Client client = clientService.findOne(objBody.getIdClient());
-        validateUpDateClient.clientExists(client);
+        validateClient.clientExists(client);
 
         Account account = accountService.findOne(client.getId_account());
         validateTransactionValue.valueInAccount(account, objBody.getValue());
@@ -166,7 +174,7 @@ public class BankServiceBean implements   BankService {
     public String getBalance(int idClient) {
 
         Client client = clientService.findOne(idClient);
-        validateUpDateClient.clientExists(client);
+        validateClient.clientExists(client);
 
         Account account = accountService.findOne(client.getId_account());
         return "{ \"Balance\" : " + Double.valueOf(String.format(Locale.US, "%.2f", account.getBalance())) + " } ";
@@ -176,7 +184,7 @@ public class BankServiceBean implements   BankService {
     public Collection<Transfer> getTransfers(Integer id) {
 
         Client client = clientService.findOne(id);
-        validateUpDateClient.clientExists(client);
+        validateClient.clientExists(client);
         Account account = accountService.findOne(client.getId_account());
         Collection<Transfer> transfers = transferService.getTransfers(account.getId());
 

@@ -7,7 +7,7 @@ import com.example.bankpoc.models.ObjBodyTransfer;
 
 public class ValidateObjBodyTransfer {
 
-    private final double minimumValueForTransfer = 0;
+    private final double minimumValueForTransfer = 1;
 
     public void check(ObjBodyTransfer objBodyTransfer) throws UnfilledFieldsException, DepositEqualsRecipientException {
 

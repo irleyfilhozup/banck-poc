@@ -5,7 +5,7 @@ import com.example.bankpoc.exception.client.ClientNotExistsException;
 import com.example.bankpoc.exception.client.UnfilledFieldsException;
 import com.example.bankpoc.models.Client;
 
-public class ValidateUpDateClient {
+public class ValidateClient {
 
     public boolean clientExists(Client client) throws ClientExistsException {
 

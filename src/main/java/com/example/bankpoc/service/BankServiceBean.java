@@ -91,21 +91,6 @@ public class BankServiceBean implements   BankService {
     }
 
     @Override
-    public boolean deleteClient(int id) {
-
-        Client clientDelete = clientService.findOne(id);
-        clientService.clientValidDeleted(clientDelete);
-
-        clientService.delete(id);
-        accountService.delete(clientDelete.getId_account());
-
-        Account accountDelete = accountService.findOne(clientDelete.getId_account());
-        accountService.accountValidDeleted(accountDelete);
-
-        return true;
-    }
-
-    @Override
     @Transactional(
             propagation = Propagation.REQUIRED,
             readOnly = false)

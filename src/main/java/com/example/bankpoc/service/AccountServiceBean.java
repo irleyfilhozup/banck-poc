@@ -57,11 +57,6 @@ public class AccountServiceBean implements AccountService {
     }
 
     @Override
-    public void delete(int id) {
-        accountRepository.deleteById(id);
-    }
-
-    @Override
     public void accountValidDeleted(Account account) {
 
         validationDeleteClient.balanceInAccount(account);

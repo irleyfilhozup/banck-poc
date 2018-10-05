@@ -15,7 +15,5 @@ public interface AccountService {
 
     Account update(Account accountUpDate, Integer id);
 
-    void delete(int id);
-
     void accountValidDeleted(Account account);
 }

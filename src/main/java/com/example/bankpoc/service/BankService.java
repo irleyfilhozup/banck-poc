@@ -27,7 +27,5 @@ public interface BankService {
 
     String getBalance(int idClient);
 
-    boolean deleteClient(int id);
-
     Collection<Transfer> getTransfers(Integer id);
 }

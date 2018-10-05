@@ -1,4 +1,4 @@
-package com.example.bankpoc;
+package com.example.bankpoc.serviceTest;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;

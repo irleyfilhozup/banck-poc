@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class ClientServiceTest extends BankBaseTest {
     public void setUp() {
         client1 = new Client("Joao da Silva", "528.111.272-40");
         client2 = new Client("Joana Meireles", "987.951.357-12");
-        clientRequest = new ClientRequest("name", "528.111.272-40");
+        clientRequest = new ClientRequest("Joao da Silva", "528.111.272-40");
         account1 = new Account(LocalDateTime.now());
         account1.setId(1L);
         id =1;
@@ -66,6 +67,17 @@ public class ClientServiceTest extends BankBaseTest {
         when(clientRepository.save(client1)).thenReturn(client1);
         thrown.expect(BusinessException.class);
         clientService.create(clientRequest2);
+    }
+
+    @Test
+    public void createTest_CpfInvalid1() {
+        ClientRequest clientRequest2 = new ClientRequest("Roberto Marinho", "321.567.685.01");
+        when(accountService.create(any(Account.class))).thenReturn(account1);
+        when(clientRepository.findByCpf(anyString())).thenReturn(client1);
+        when(clientRepository.save(client1)).thenReturn(client1);
+        thrown.expect(BusinessException.class);
+        clientService.create(clientRequest2);
+
     }
 
     @Test
@@ -125,4 +137,47 @@ public class ClientServiceTest extends BankBaseTest {
         }
     }
 
+    @Test
+    public void findByCpfTest_Found() {
+        when(clientRepository.findByCpf(anyString())).thenReturn(client1);
+        ClientResponse clientResponse = clientService.findByCpf("528.111.272-40");
+        assertEquals("528.111.272-40", clientResponse.getCpf());
+        assertEquals("Joao da Silva", clientResponse.getName());
+    }
+
+    @Test
+    public void findByCpfTest_NotFound() {
+        when(clientRepository.findByCpf(anyString())).thenReturn(null);
+        try {
+            clientService.findByCpf("528.111.272-40");
+        }
+        catch (Exception error) {
+            assertEquals("cpf não cadastrado", error.getMessage());
+        }
+    }
+
+    @Test
+    public void updateTest_Ok() {
+
+        when(clientRepository.save(client1)).thenReturn(client1);
+        when(accountService.create(any(Account.class))).thenReturn(account1);
+        when(clientRepository.findByAccountId(anyLong())).thenReturn(client1);
+        ClientResponse clientResponse = clientService.update(clientRequest,1L);
+        assertEquals("528.111.272-40", clientResponse.getCpf());
+        assertEquals("Joao da Silva", clientResponse.getName());
+    }
+
+    @Test
+    public void updateTest_NotExist() {
+
+        when(clientRepository.save(client1)).thenReturn(client1);
+        when(accountService.create(any(Account.class))).thenReturn(account1);
+        when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
+        try {
+            clientService.update(clientRequest,1L);
+        }
+        catch (Exception error) {
+            assertEquals("cpf não cadastrado", error.getMessage());
+        }
+    }
 }

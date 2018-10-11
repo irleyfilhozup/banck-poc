@@ -8,7 +8,7 @@ GET "localhost:8080/clients" retorna todos os clientes cadastrados.
 GET "localhost:8080/searchClient/2" retorna o cliente de acordo com o id passado na url.
 
 PUT "localhost:8080/client/update/2" edita o cliente de acordo com o id passado na url e os parâmetros passados em JSON no body na requisição.
-Modelo body da requisição: { "id_account": 2, "name": "Maria Ferreira", "cpf": "333.333.555-98", "date_creation": "2018-09-30T00:00:00.000+0000"}
+Modelo body da requisição: { "accountId": 2, "name": "Maria Ferreira", "cpf": "333.333.555-98", "date_creation": "2018-09-30T00:00:00.000+0000"}
 
 POST "localhost:8080/client/new" cadastra um novo cliente de acordo com os parâmetros passados em JSON no body na requisição.
 Modelo body da requisição: { "name": "Maria Ferreira", "cpf": "333.333.555-98", "date_creation": "2018-09-30T00:00:00.000+0000"}

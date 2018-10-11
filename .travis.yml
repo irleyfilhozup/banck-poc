@@ -1,0 +1,19 @@
+language: java
+
+sudo: false
+
+env:
+  global:
+  - CODECOV_TOKEN="3d91f5b2-2aa2-42f6-a901-dcbf542f48c0"
+
+script: "mvn cobertura:cobertura"
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  emails:
+    recipients:
+      -irley.filho@zup.com.br
+    on_success: always
+    on_failure: always

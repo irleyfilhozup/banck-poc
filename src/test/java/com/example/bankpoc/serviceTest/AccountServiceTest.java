@@ -45,6 +45,19 @@ public class AccountServiceTest extends BankBaseTest {
     }
 
     @Test
+    public void findById_Test_Error() {
+        Optional<Account> accountOptional1;
+        accountOptional1 = Optional.ofNullable(null);
+        when(accountRepository.findById(anyLong())).thenReturn(accountOptional1);
+        try {
+            accountService.findById(1L);
+        }
+        catch (NonExistentException exception) {
+            assertEquals("Conta Inexistente",exception.getMessage());
+        }
+    }
+
+    @Test
     public void create_Test() {
         when(accountRepository.save(any(Account.class))).thenReturn(account1);
         Account account = accountService.create(account1);
@@ -54,7 +67,7 @@ public class AccountServiceTest extends BankBaseTest {
     @Test
     public void update_Test() {
         when(accountRepository.save(any(Account.class))).thenReturn(account1);
-        Account account = accountService.create(account1);
+        Account account = accountService.update(account1);
         assertNotNull(account);
     }
 
@@ -67,5 +80,12 @@ public class AccountServiceTest extends BankBaseTest {
         catch (NonExistentException exception) {
             assertEquals("Conta Inexistente",exception.getMessage());
         }
+    }
+
+    @Test
+    public void checkIfAccountExists_Test2() {
+
+        accountService.checkIfAccountExists(account1);
+        assertEquals(1,1);
     }
 }

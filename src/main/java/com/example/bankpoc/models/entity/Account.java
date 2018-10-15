@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.exception.client.InvalidValueException;
 
 @Entity
@@ -57,7 +58,7 @@ public class Account {
 
     public void deposit(double value) {
         if (value <= 0) {
-            throw new InvalidValueException(value);
+            throw new BusinessException("VALOR_INVALIDO","Valor invalido para deposito");
         }
         this.balance += value;
     }

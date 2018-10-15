@@ -20,7 +20,6 @@ public class Deposit {
     private Long id_account;
     private double value;
     private LocalDateTime date;
-    private String type_transfer;
 
     public Deposit(){}
 
@@ -28,7 +27,6 @@ public class Deposit {
         this.id_account = depositRequest.getAccountId();
         this.value = depositRequest.getValue();
         this.date = LocalDateTime.now();
-        this.type_transfer = TypeTransfer.DEPOSIT.name();
     }
 
     public Long getId() {
@@ -63,14 +61,6 @@ public class Deposit {
         this.date = date;
     }
 
-    public String getType_transfer() {
-        return type_transfer;
-    }
-
-    public void setType_transfer(String type_transfer) {
-        this.type_transfer = type_transfer;
-    }
-
     @Override
     public String toString() {
         return "Deposit{" +
@@ -78,7 +68,6 @@ public class Deposit {
                 ", id_account=" + id_account +
                 ", value=" + value +
                 ", date=" + date +
-                ", type_transfer='" + type_transfer + '\'' +
                 '}';
     }
 }

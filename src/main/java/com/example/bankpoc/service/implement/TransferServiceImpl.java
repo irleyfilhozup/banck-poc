@@ -1,5 +1,6 @@
 package com.example.bankpoc.service.implement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class TransferServiceImpl implements TransferService {
 
     @Override
     public List<Transfer> getTransfers(Long idAccount) {
-        return transferRepository.findByTransactionWithId(idAccount);
+        List<Transfer> transfer = new ArrayList<>();
+        transfer = transferRepository.findByTransactionWithId(idAccount);
+        return transfer;
     }
 }

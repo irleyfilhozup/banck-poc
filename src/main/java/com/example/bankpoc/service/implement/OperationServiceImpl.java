@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.bankpoc.exception.transfer.DepositEqualsRecipientException;
+import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.CashOut;
 import com.example.bankpoc.models.entity.Deposit;
@@ -47,7 +47,6 @@ public class OperationServiceImpl implements OperationService {
     @Autowired
     CashOutService cashOutService;
 
-
     @Override
     public String getBalance(Long accountId) {
         clientService.checkIfClientNotExists(clientService.findByAccountId(accountId));
@@ -64,19 +63,19 @@ public class OperationServiceImpl implements OperationService {
         Deposit deposit = depositService.create(new Deposit(depositRequest));
         accountService.update(account);
         return new DepositResponse(deposit.getId_account(), deposit.getValue(), deposit.getDate(),
-                deposit.getType_transfer());
+                TypeTransfer.DEPOSIT.name());
     }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public CashoutResponse cashOut(CashoutRequest cashoutRequest) {
         Account account = accountService.findById(cashoutRequest.getAccountId());
+        validValueCashout(account, cashoutRequest.getValue());
         account.cashOut(cashoutRequest.getValue());
         CashOut cashOut = cashOutService.create(cashoutRequest);
         accountService.update(account);
         return new CashoutResponse(cashOut.getAccountId(), cashOut.getValue(), cashOut.getDate(),
-                cashOut.getTransferType());
+                TypeTransfer.CASHOUT.name());
     }
 
     @Override
@@ -84,7 +83,8 @@ public class OperationServiceImpl implements OperationService {
     public TransferResponse transfer(TransferRequest transferRequest) {
         validTransfer(transferRequest);
         Account accountDeposit = accountService.findById(transferRequest.getDepositAccountid());
-        Account accountRecipient = accountService.findById(transferRequest.getDepositAccountid());
+        Account accountRecipient = accountService.findById(transferRequest.getRecipientAccountid());
+        validValueTransfer(accountDeposit, transferRequest.getValue());
         accountDeposit.cashOut(transferRequest.getValue());
         accountRecipient.deposit(transferRequest.getValue());
         Transfer transfer = transferService.transfer(transferRequest);
@@ -98,22 +98,27 @@ public class OperationServiceImpl implements OperationService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Transfer> getTransfers(Long accountId) {
-
         Account account = accountService.findById(accountId);
-
         List<Transfer> transfers = transferService.getTransfers(accountId);
         List<Deposit> deposits = depositService.findCustomerDeposits(accountId);
         List<CashOut> cashOuts = cashOutService.findCustomeCashOuts(accountId);
-
         TransfersResponse transfersResponse = new TransfersResponse(transfers, deposits, cashOuts);
-
         return transfersResponse.getTransactions();
     }
 
     @Override
     public void validTransfer(TransferRequest transferRequest) {
-
         if (transferRequest.getDepositAccountid().equals(transferRequest.getRecipientAccountid()))
-            throw new DepositEqualsRecipientException();
+            throw new BusinessException("INVALID_TRANSFER", "Não é possivel fazer uma transação para a mesma conta");
+    }
+
+    private void validValueTransfer(Account accountDeposit, double value) {
+        if(accountDeposit.getBalance()<value)
+            throw new BusinessException("Saldo Insuficiente", "value");
+    }
+
+    private void validValueCashout(Account account, double value) {
+        if(account.getBalance()<value)
+            throw new BusinessException("Valor Invalido para saque","value");
     }
 }

@@ -70,7 +70,7 @@ public class OperationServiceImpl implements OperationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public CashoutResponse cashOut(CashoutRequest cashoutRequest) {
         Account account = accountService.findById(cashoutRequest.getAccountId());
-        validValueCashout(account, cashoutRequest.getValue());
+        this.validValueCashout(account, cashoutRequest.getValue());
         account.cashOut(cashoutRequest.getValue());
         CashOut cashOut = cashOutService.create(cashoutRequest);
         accountService.update(account);

@@ -88,17 +88,9 @@ public class ClientServiceTest extends BankBaseTest {
         try {
             clientService.create(clientRequest2);
         }catch (Exception error) {
-            assertEquals("CPF Invalido", error.getMessage());
+            assertEquals("cpf", error.getMessage());
         }
     }
-
-//    @Test(expected = BusinessException.class)
-//    public void createTestCpfInvalid2() {
-//        ClientRequest clientRequest2 = new ClientRequest("Roberto Marinho", "321.654.555");
-//        when(accountService.create(any(Account.class))).thenReturn(account1);
-//        when(clientRepository.save(client1)).thenReturn(client1);
-//        clientService.create(clientRequest2);
-//    }
 
     @Test
     public void findByAccountIdResponseTest_Ok() {
@@ -115,7 +107,7 @@ public class ClientServiceTest extends BankBaseTest {
             clientService.findByAccountIdResponse(1L);
         }
         catch (Exception error) {
-            assertEquals("cpf não cadastrado", error.getMessage());
+            assertEquals("Conta Inexistente", error.getMessage());
         }
     }
 
@@ -133,7 +125,7 @@ public class ClientServiceTest extends BankBaseTest {
             clientService.findByAccountId(2L);
         }
         catch (Exception error) {
-            assertEquals("cpf não cadastrado", error.getMessage());
+            assertEquals("Conta Inexistente", error.getMessage());
         }
     }
 
@@ -152,7 +144,7 @@ public class ClientServiceTest extends BankBaseTest {
             clientService.findByCpf("528.111.272-40");
         }
         catch (Exception error) {
-            assertEquals("cpf não cadastrado", error.getMessage());
+            assertEquals("Conta Inexistente", error.getMessage());
         }
     }
 
@@ -177,7 +169,7 @@ public class ClientServiceTest extends BankBaseTest {
             clientService.update(clientRequest,1L);
         }
         catch (Exception error) {
-            assertEquals("cpf não cadastrado", error.getMessage());
+            assertEquals("Conta Inexistente", error.getMessage());
         }
     }
 }

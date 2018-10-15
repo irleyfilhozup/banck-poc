@@ -6,10 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.example.bankpoc.models.enums.TypeTransfer;
 
 @Entity
+@Table(name = "cash_out")
 public class CashOut {
 
     @Id
@@ -19,7 +21,6 @@ public class CashOut {
     private Long accountId;
     private double value;
     private LocalDateTime date;
-    private String transferType;
 
     public CashOut(){}
 
@@ -27,7 +28,6 @@ public class CashOut {
         this.accountId = accountId;
         this.value = value;
         this.date = LocalDateTime.now();
-        this.transferType = TypeTransfer.CASHOUT.name();
     }
 
     public Long getId() {
@@ -62,14 +62,6 @@ public class CashOut {
         this.date = date;
     }
 
-    public String getTransferType() {
-        return transferType;
-    }
-
-    public void setTransferType(String transferType) {
-        this.transferType = transferType;
-    }
-
     @Override
     public String toString() {
         return "CashOut{" +
@@ -77,7 +69,6 @@ public class CashOut {
                 ", accountId=" + accountId +
                 ", value=" + value +
                 ", date=" + date +
-                ", transferType='" + transferType + '\'' +
                 '}';
     }
 }

@@ -23,29 +23,20 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    @PostMapping(
-            value = "/create",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@Valid @RequestBody ClientRequest clientRequest) {
         ClientResponse clientResponse = clientService.create(clientRequest);
         return new ResponseEntity<>(clientResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping(
-            value = "/{accountId}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{accountId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity get(@PathVariable("accountId") Integer accountId) {
         ClientResponse client = clientService.findByAccountIdResponse(Long.valueOf(accountId));
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
-    @PutMapping(
-            value = "/upadte/{accountId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity update(@PathVariable("accountId") Integer accountId,
-            @Valid @RequestBody ClientRequest clientRequest) {
+    @PutMapping(value = "/update/{accountId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(@PathVariable("accountId") Integer accountId, @Valid @RequestBody ClientRequest clientRequest) {
         ClientResponse clientResponse = clientService.update(clientRequest, Long.valueOf(accountId));
         return new ResponseEntity<>(clientResponse, HttpStatus.OK);
     }

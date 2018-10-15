@@ -21,7 +21,8 @@ public class CashOutServiceImpl implements CashOutService {
 
     @Override
     public CashOut create(CashoutRequest cashoutRequest) {
-        return cashOutRepository.save(new CashOut(cashoutRequest.getAccountId(), cashoutRequest.getValue()));
+        CashOut cashOut = new CashOut(cashoutRequest.getAccountId(), cashoutRequest.getValue());
+        return cashOutRepository.save(cashOut);
     }
 
     @Override

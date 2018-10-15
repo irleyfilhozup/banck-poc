@@ -11,7 +11,7 @@ import com.example.bankpoc.models.entity.Transfer;
 @Repository
 public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
-    @Query(value = "SELECT * FROM transfer WHERE id_account_source = ?1 OR id_destination_account = ?1", name =
+    @Query(value = "SELECT * FROM transfer WHERE account_id_recipient = ?1 OR account_id_desposit = ?1", name =
             "findTransactions", nativeQuery = true)
     List<Transfer> findByTransactionWithId(Long id);
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NonExistentException;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.InternalError;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -30,8 +32,19 @@ public class ControllerExceptionHandler {
     public MessageBuilder processValidationErrorIntern(BusinessException exception) {
         MessageBuilder messageBuilder = new MessageBuilder();
         messageBuilder.setField(exception.getField());
+        messageBuilder.setTitle(exception.getError());
         messageBuilder.setMessage(exception.getMessage());
         return messageBuilder;
     }
 
+    @ExceptionHandler(NonExistentException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public MessageBuilder processValidationErrorNotFound(NonExistentException exception) {
+        MessageBuilder messageBuilder = new MessageBuilder();
+        messageBuilder.setField(exception.getField());
+        messageBuilder.setTitle(exception.getError());
+        messageBuilder.setMessage(exception.getMessage());
+        return messageBuilder;
+    }
 }

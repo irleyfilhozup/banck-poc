@@ -36,7 +36,7 @@ public class ClientControllerTest extends BankBaseTest {
     private ClientResponse clientResponse;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         clientRequest = new ClientRequest("Joao da Silva", "528.111.272-40");
         clientResponse = new ClientResponse("Joao da Silva", "528.111.272-40",1L);
     }

@@ -1,15 +1,11 @@
 package com.example.bankpoc.service.implement;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.exception.NonExistentException;
-import com.example.bankpoc.exception.account.AccountNotExistsException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.repository.AccountRepository;
 import com.example.bankpoc.service.interfaceServ.AccountService;

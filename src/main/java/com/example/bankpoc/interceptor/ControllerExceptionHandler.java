@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.exception.NonExistentException;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.InternalError;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)

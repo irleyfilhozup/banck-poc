@@ -1,61 +1,56 @@
-//package com.example.bankpoc.serviceTest;
-//
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNotNull;
-//
-//import org.junit.runner.RunWith;
-//import org.springframework.test.context.junit4.SpringRunner;
-//
-//@RunWith(SpringRunner.class)
-//public class TransferServiceTest {
-///*
-//    @MockBean
-//    private TransferRepository transferRepository;
-//
-//    private Transfer transfer1;
-//    private Transfer transfer2;
-//    private Collection<Transfer> allTrasnfers;
-//
-//    @Before
-//    public void setUp() {
-//
-//        transfer1 = new Transfer(1, 200, new Timestamp(System.currentTimeMillis()), TypeTransfer.DEPOSIT);
-//        transfer1.setId(1);
-//
-//        transfer2 = new Transfer(2, 200, new Timestamp(System.currentTimeMillis()), TypeTransfer.DEPOSIT);
-//        transfer2.setId(2);
-//
-//        allTrasnfers = Arrays.asList(transfer1, transfer2);
-//    }
-//
-//    @Test
-//    public void depositTest() {
-//
-//        given(transferRepository.save(transfer1)).willReturn(transfer1);
-//
-//        Transfer transferResp = transferRepository.save(transfer1);
-//        assertNotNull(transferResp);
-//        assertEquals(200, transfer1.getValue(),200);
-//    }
-//
-//    @Test
-//    public void transferBankTest() {
-//
-//        given(transferRepository.save(transfer1)).willReturn(transfer1);
-//
-//        Transfer transferResp = transferRepository.save(transfer1);
-//        assertNotNull(transferResp);
-//        assertEquals(200, transfer1.getValue(),200);
-//    }
-//
-//    @Test
-//    public void cashOutTest() {
-//
-//        given(transferRepository.save(transfer1)).willReturn(transfer1);
-//
-//        Transfer transferResp = transferRepository.save(transfer1);
-//        assertNotNull(transferResp);
-//        assertEquals(200, transfer1.getValue(),200);
-//    }
-//    */
-//}
+package com.example.bankpoc.serviceTest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import com.example.bankpoc.base.BankBaseTest;
+import com.example.bankpoc.models.entity.Transfer;
+import com.example.bankpoc.models.request.TransferRequest;
+import com.example.bankpoc.repository.TransferRepository;
+import com.example.bankpoc.service.implement.TransferServiceImpl;
+
+public class TransferServiceTest extends BankBaseTest {
+
+    @Mock
+    private TransferRepository transferRepository;
+
+    @InjectMocks
+    private TransferServiceImpl transferService;
+
+    private TransferRequest transferRequest;
+    private Transfer transfer;
+    private List<Transfer> list;
+
+    @Before
+    public void setUp() {
+        transferRequest = new TransferRequest(1L,2L,200);
+        transfer = new Transfer(transferRequest);
+        list = new ArrayList<>();
+        list.add(transfer);
+    }
+
+    @Test
+    public void transferTest() {
+        when(transferRepository.save(any(Transfer.class))).thenReturn(transfer);
+        Transfer transferResp = transferService.transfer(transferRequest);
+        assertNotNull(transferResp);
+    }
+
+    @Test
+    public void getTransfersTest() {
+        when(transferRepository.findByTransactionWithId(anyLong())).thenReturn(list);
+        List<Transfer> transfers = transferService.getTransfers(1L);
+        assertEquals(1,transfers.size());
+    }
+}

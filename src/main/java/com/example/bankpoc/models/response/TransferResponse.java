@@ -3,7 +3,6 @@ package com.example.bankpoc.models.response;
 import java.time.LocalDateTime;
 
 import com.example.bankpoc.models.enums.TypeTransfer;
-import com.example.bankpoc.util.DateHour;
 
 public class TransferResponse {
 

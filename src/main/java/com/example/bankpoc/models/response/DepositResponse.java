@@ -2,8 +2,6 @@ package com.example.bankpoc.models.response;
 
 import java.time.LocalDateTime;
 
-import com.example.bankpoc.util.DateHour;
-
 public class DepositResponse {
 
     private Long accountId;

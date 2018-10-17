@@ -14,14 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import com.example.bankpoc.base.BankBaseTest;
 import com.example.bankpoc.exception.BusinessException;
-import com.example.bankpoc.exception.NonExistentException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.CashOut;
 import com.example.bankpoc.models.entity.Client;
 import com.example.bankpoc.models.entity.Deposit;
-import com.example.bankpoc.models.entity.Transaction;
 import com.example.bankpoc.models.entity.Transfer;
 import com.example.bankpoc.models.enums.TypeTransfer;
 import com.example.bankpoc.models.request.CashoutRequest;
@@ -30,7 +29,6 @@ import com.example.bankpoc.models.request.TransferRequest;
 import com.example.bankpoc.models.response.CashoutResponse;
 import com.example.bankpoc.models.response.DepositResponse;
 import com.example.bankpoc.models.response.TransferResponse;
-import com.example.bankpoc.models.response.TransfersResponse;
 import com.example.bankpoc.service.implement.OperationServiceImpl;
 import com.example.bankpoc.service.interfaceServ.AccountService;
 import com.example.bankpoc.service.interfaceServ.CashOutService;
@@ -135,7 +133,6 @@ public class OperationServiceTest extends BankBaseTest {
     public void cashOutTest_Error() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(cashOutService.create(any(CashoutRequest.class))).thenReturn(cashOut);
-
         CashoutRequest cashoutRequest1 = new CashoutRequest(1L, 300);
         try {
             operationService.cashOut(cashoutRequest1);

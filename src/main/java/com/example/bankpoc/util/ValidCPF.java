@@ -4,9 +4,6 @@ import com.example.bankpoc.exception.BusinessException;
 
 public class ValidCPF {
 
-    private ValidCPF() {
-    }
-
     public static void check(String cpfNumber) {
         if (!isCPFValid(cleanCPF(cpfNumber))) {
             throw new BusinessException("cpf","CPF Invalido");

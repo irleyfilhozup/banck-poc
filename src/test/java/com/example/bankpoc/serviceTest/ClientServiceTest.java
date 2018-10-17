@@ -88,7 +88,7 @@ public class ClientServiceTest extends BankBaseTest {
         try {
             clientService.create(clientRequest2);
         }catch (Exception error) {
-            assertEquals("cpf", error.getMessage());
+            assertEquals("CPF Invalido", error.getMessage());
         }
     }
 

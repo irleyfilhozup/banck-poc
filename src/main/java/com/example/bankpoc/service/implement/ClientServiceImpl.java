@@ -1,84 +1,92 @@
-package com.example.bankpoc.service.implement
+package com.example.bankpoc.service.implement;
 
-import java.time.LocalDateTime
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Propagation
-import org.springframework.transaction.annotation.Transactional
-import com.example.bankpoc.exception.BusinessException
-import com.example.bankpoc.exception.NonExistentException
-import com.example.bankpoc.models.entity.Account
-import com.example.bankpoc.models.entity.Client
-import com.example.bankpoc.models.request.ClientRequest
-import com.example.bankpoc.models.response.ClientResponse
-import com.example.bankpoc.repository.ClientRepository
-import com.example.bankpoc.service.interfaceServ.AccountService
-import com.example.bankpoc.service.interfaceServ.ClientService
-import com.example.bankpoc.util.ValidCPF
+import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NonExistentException;
+import com.example.bankpoc.models.entity.Account;
+import com.example.bankpoc.models.entity.Client;
+import com.example.bankpoc.models.request.ClientRequest;
+import com.example.bankpoc.models.response.ClientResponse;
+import com.example.bankpoc.repository.ClientRepository;
+import com.example.bankpoc.service.interfaceServ.AccountService;
+import com.example.bankpoc.service.interfaceServ.ClientService;
+import com.example.bankpoc.util.ValidCPF;
 
 @Component
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-class ClientServiceImpl : ClientService {
+public class ClientServiceImpl implements ClientService {
 
     @Autowired
-    private val clientRepository: ClientRepository? = null
+    private ClientRepository clientRepository;
 
     @Autowired
-    private val accountService: AccountService? = null
+    private AccountService accountService;
 
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    override fun create(clientRequest: ClientRequest): ClientResponse {
-        ValidCPF.check(clientRequest.cpf)
-        this.checkIfCPFExists(clientRequest.cpf)
-        val account = accountService!!.create(Account(LocalDateTime.now()))
-        val client = Client()
-        client.name = clientRequest.name
-        client.cpf = clientRequest.cpf
-        client.accountId = account.id
-        client.createdAt = LocalDateTime.now()
-        clientRepository!!.save(client)
-        return ClientResponse(client.name, client.cpf, client.accountId)
+    public ClientResponse create(ClientRequest clientRequest) {
+        ValidCPF.check(clientRequest.getCpf());
+        this.checkIfCPFExists(clientRequest.getCpf());
+        Account account = accountService.create(new Account(LocalDateTime.now()));
+        Client client = new Client();
+        client.setName(clientRequest.getName());
+        client.setCpf(clientRequest.getCpf());
+        client.setAccountId(account.getId());
+        client.setCreatedAt(LocalDateTime.now());
+        clientRepository.save(client);
+        return new ClientResponse(client.getName(), client.getCpf(), client.getAccountId());
     }
 
-    override fun findByAccountIdResponse(accountId: Long?): ClientResponse {
-        val client = clientRepository!!.findByAccountId(accountId)
-        this.checkIfClientNotExists(client)
-        return ClientResponse(client.name, client.cpf, client.accountId)
+    @Override
+    public ClientResponse findByAccountIdResponse(Long accountId) {
+        Client client = clientRepository.findByAccountId(accountId);
+        this.checkIfClientNotExists(client);
+        return new ClientResponse(client.getName(), client.getCpf(), client.getAccountId());
     }
 
-    override fun findByAccountId(accountId: Long?): Client {
-        val client = clientRepository!!.findByAccountId(accountId)
-        this.checkIfClientNotExists(client)
-        return client
+    @Override
+    public Client findByAccountId(Long accountId) {
+        Client client = clientRepository.findByAccountId(accountId);
+        this.checkIfClientNotExists(client);
+        return client;
     }
 
-    override fun findByCpf(cpf: String): ClientResponse {
-        val client = clientRepository!!.findByCpf(cpf)
-        this.checkIfClientNotExists(client)
-        return ClientResponse(client.name, client.cpf, client.accountId)
+    @Override
+    public ClientResponse findByCpf(String cpf) {
+        Client client = clientRepository.findByCpf(cpf);
+        this.checkIfClientNotExists(client);
+        return new ClientResponse(client.getName(), client.getCpf(), client.getAccountId());
     }
 
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    override fun update(clientRequest: ClientRequest, accountId: Long?): ClientResponse {
-        val clientUpdated = this.findByAccountId(accountId)
-        clientUpdated.name = clientRequest.name
-        clientUpdated.cpf = clientRequest.cpf
-        clientRepository!!.save(clientUpdated)
-        return ClientResponse(clientUpdated.name, clientUpdated.cpf, clientUpdated.accountId)
+    public ClientResponse update(ClientRequest clientRequest, Long accountId) {
+        Client clientUpdated = this.findByAccountId(accountId);
+        clientUpdated.setName(clientRequest.getName());
+        clientUpdated.setCpf(clientRequest.getCpf());
+        clientRepository.save(clientUpdated);
+        return new ClientResponse(clientUpdated.getName(), clientUpdated.getCpf(), clientUpdated.getAccountId());
     }
 
-    override fun checkIfCPFExists(cpf: String) {
-        val client = clientRepository!!.findByCpf(cpf)
-        this.checkIfClientExists(client)
+    @Override
+    public void checkIfCPFExists(String cpf) {
+        Client client = clientRepository.findByCpf(cpf);
+        this.checkIfClientExists(client);
     }
 
-    override fun checkIfClientExists(client: Client?) {
+    @Override
+    public void checkIfClientExists(Client client) {
         if (client != null)
-            throw BusinessException("Cliente já possui cadastro no banco de dados")
+            throw new BusinessException("Cliente já possui cadastro no banco de dados");
     }
 
-    override fun checkIfClientNotExists(client: Client?) {
+    @Override
+    public void checkIfClientNotExists(Client client) {
         if (client == null)
-            throw NonExistentException("Conta Inexistente")
+            throw new NonExistentException("Conta Inexistente");
     }
 }

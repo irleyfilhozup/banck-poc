@@ -1,39 +1,36 @@
 package com.example.bankpoc.models.entity;
 
-import java.time.LocalDateTime;
-
 import com.example.bankpoc.models.enums.TypeTransfer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
 
+    private String transactionType;
+    private double value;
+    private String date;
     private Long accountIdDesposit;
     private Long accountIdRecipient;
-    private LocalDateTime date;
-    private double value;
-    private String typeTrasnfer;
 
-    public Transaction(Long accountIdDesposit, Long accountIdRecipient, LocalDateTime date, double value, TypeTransfer type) {
-        this.accountIdDesposit = accountIdDesposit;
-        this.accountIdRecipient = accountIdRecipient;
-        this.date = date;
-        this.value = value;
-        this.typeTrasnfer = type.name();
-    }
-
-    public Transaction(Long accountIdDesposit, LocalDateTime date, double value, TypeTransfer type) {
+    public Transaction(Long accountIdDesposit, String date, double value, TypeTransfer type) {
         this.accountIdDesposit = accountIdDesposit;
         this.date = date;
         this.value = value;
-        this.typeTrasnfer = type.name();
+        this.transactionType = type.name();
     }
 
-    public Transaction(LocalDateTime date, Long accountIdRecipient,  double value, TypeTransfer type) {
+    public Transaction(TypeTransfer type, Long accountIdRecipient, String date, double value) {
         this.accountIdRecipient = accountIdRecipient;
         this.date = date;
         this.value = value;
-        this.typeTrasnfer = type.name();
+        this.transactionType = type.name();
+    }
+
+    public Transaction(String date, double value, TypeTransfer type) {
+        this.accountIdDesposit = accountIdDesposit;
+        this.date = date;
+        this.value = value;
+        this.transactionType = type.name();
     }
 
     public Long getAccountIdDesposit() {
@@ -52,11 +49,11 @@ public class Transaction {
         this.accountIdRecipient = accountIdRecipient;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -68,12 +65,12 @@ public class Transaction {
         this.value = value;
     }
 
-    public String getTypeTrasnfer() {
-        return typeTrasnfer;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public void setTypeTrasnfer(String typeTrasnfer) {
-        this.typeTrasnfer = typeTrasnfer;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     @Override

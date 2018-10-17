@@ -2,12 +2,10 @@ package com.example.bankpoc.service.implement;
 
 import java.util.List;
 import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.CashOut;
@@ -62,7 +60,7 @@ public class OperationServiceImpl implements OperationService {
         account.deposit(depositRequest.getValue());
         Deposit deposit = depositService.create(new Deposit(depositRequest));
         accountService.update(account);
-        return new DepositResponse(deposit.getId_account(), deposit.getValue(), deposit.getDate(),
+        return new DepositResponse(deposit.getValue(), deposit.getDate(),
                 TypeTransfer.DEPOSIT.name());
     }
 
@@ -74,7 +72,7 @@ public class OperationServiceImpl implements OperationService {
         account.cashOut(cashoutRequest.getValue());
         CashOut cashOut = cashOutService.create(cashoutRequest);
         accountService.update(account);
-        return new CashoutResponse(cashOut.getAccountId(), cashOut.getValue(), cashOut.getDate(),
+        return new CashoutResponse(cashOut.getValue(), cashOut.getDate(),
                 TypeTransfer.CASHOUT.name());
     }
 
@@ -90,7 +88,8 @@ public class OperationServiceImpl implements OperationService {
         Transfer transfer = transferService.transfer(transferRequest);
         accountService.update(accountDeposit);
         accountService.update(accountRecipient);
-        return new TransferResponse(transfer.getAccountIdDesposit(), transfer.getAccountIdRecipient(),
+        return new TransferResponse(transfer.getAccountIdDesposit(),
+                transfer.getAccountIdRecipient(),
                 transfer.getValue(),
                 transfer.getDate(), TypeTransfer.TRANSFER);
     }
@@ -102,7 +101,7 @@ public class OperationServiceImpl implements OperationService {
         List<Transfer> transfers = transferService.getTransfers(accountId);
         List<Deposit> deposits = depositService.findCustomerDeposits(accountId);
         List<CashOut> cashOuts = cashOutService.findCustomeCashOuts(accountId);
-        TransfersResponse transfersResponse = new TransfersResponse(transfers, deposits, cashOuts);
+        TransfersResponse transfersResponse = new TransfersResponse(accountId, transfers, deposits, cashOuts);
         return transfersResponse.getTransactions();
     }
 

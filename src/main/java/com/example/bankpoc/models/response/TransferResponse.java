@@ -1,7 +1,5 @@
 package com.example.bankpoc.models.response;
 
-import java.time.LocalDateTime;
-
 import com.example.bankpoc.models.enums.TypeTransfer;
 
 public class TransferResponse {
@@ -10,9 +8,9 @@ public class TransferResponse {
     private Long accountIdDesposit;
     private Long accountIdRecipient;
     private double value;
-    private LocalDateTime date;
+    private String date;
 
-    public TransferResponse(Long accountIdDesposit, Long accountIdRecipient, double value, LocalDateTime date, TypeTransfer typeTransfer) {
+    public TransferResponse(Long accountIdDesposit, Long accountIdRecipient, double value, String date, TypeTransfer typeTransfer) {
         this.typeTransfer = typeTransfer.name();
         this.accountIdDesposit = accountIdDesposit;
         this.accountIdRecipient = accountIdRecipient;
@@ -52,11 +50,22 @@ public class TransferResponse {
         this.value = value;
     }
 
-    public LocalDateTime getDate() {
-        return this.date;
+    public String getDate() {
+        return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "TransferResponse{" +
+                "typeTransfer='" + typeTransfer + '\'' +
+                ", accountIdDesposit=" + accountIdDesposit +
+                ", accountIdRecipient=" + accountIdRecipient +
+                ", value=" + value +
+                ", date=" + date +
+                '}';
     }
 }

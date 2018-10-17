@@ -1,14 +1,13 @@
 package com.example.bankpoc.models.entity;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.example.bankpoc.models.enums.TypeTransfer;
+import com.example.bankpoc.util.DateHour;
 
 @Entity
 @Table(name = "cash_out")
@@ -54,8 +53,8 @@ public class CashOut {
         this.value = value;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getDate() {
+        return DateHour.format(date);
     }
 
     public void setDate(LocalDateTime date) {

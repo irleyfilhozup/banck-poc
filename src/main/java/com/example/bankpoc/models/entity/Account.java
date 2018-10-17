@@ -1,13 +1,13 @@
 package com.example.bankpoc.models.entity;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.util.DateHour;
 
 @Entity
 public class Account {
@@ -19,6 +19,8 @@ public class Account {
     @Column(name = "DATE_CREATION")
     private LocalDateTime createdAt;
 
+    private double balance;
+
     public double getBalance() {
         return balance;
     }
@@ -26,8 +28,6 @@ public class Account {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
-    private double balance;
 
     public Account() {
     }
@@ -50,8 +50,8 @@ public class Account {
         return id;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        return DateHour.format(createdAt);
     }
 
     public void deposit(double value) {

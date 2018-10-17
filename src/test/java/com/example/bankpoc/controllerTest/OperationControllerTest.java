@@ -27,6 +27,7 @@ import com.example.bankpoc.models.response.CashoutResponse;
 import com.example.bankpoc.models.response.DepositResponse;
 import com.example.bankpoc.models.response.TransferResponse;
 import com.example.bankpoc.service.implement.OperationServiceImpl;
+import com.example.bankpoc.util.DateHour;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(OperationController.class)
@@ -52,11 +53,11 @@ public class OperationControllerTest extends BankBaseTest {
     public void setUp() {
         value = "200.00";
         depositRequest = new DepositRequest(1L, 200);
-        depositResponse = new DepositResponse(1L,200, LocalDateTime.now(), TypeTransfer.DEPOSIT.name());
+        depositResponse = new DepositResponse(200, DateHour.format(LocalDateTime.now()), TypeTransfer.DEPOSIT.name());
         cashoutRequest = new CashoutRequest(1L, 200);
-        cashoutResponse = new CashoutResponse(1L, 200, LocalDateTime.now(), TypeTransfer.CASHOUT.name());
+        cashoutResponse = new CashoutResponse(200, DateHour.format(LocalDateTime.now()), TypeTransfer.CASHOUT.name());
         transferRequest = new TransferRequest(1L, 2l, 200);
-        transferResponse = new TransferResponse(1L, 2L, 200, LocalDateTime.now(),TypeTransfer.TRANSFER);
+        transferResponse = new TransferResponse(2L, 1L,200, DateHour.format(LocalDateTime.now()),TypeTransfer.TRANSFER);
         transfer = new Transfer(transferRequest);
         transfers = new ArrayList<>();
         transfers.add(transfer);

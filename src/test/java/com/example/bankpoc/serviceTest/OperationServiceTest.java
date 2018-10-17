@@ -37,6 +37,7 @@ import com.example.bankpoc.service.interfaceServ.CashOutService;
 import com.example.bankpoc.service.interfaceServ.ClientService;
 import com.example.bankpoc.service.interfaceServ.DepositService;
 import com.example.bankpoc.service.interfaceServ.TransferService;
+import com.example.bankpoc.util.DateHour;
 
 public class OperationServiceTest extends BankBaseTest {
 
@@ -83,7 +84,7 @@ public class OperationServiceTest extends BankBaseTest {
         account2 = new Account(LocalDateTime.now());
         account2.setId(2L);
         account2.setBalance(200);
-        depositResponse = new DepositResponse(1L, 200, LocalDateTime.now(),
+        depositResponse = new DepositResponse( 200, DateHour.format(LocalDateTime.now()),
                 TypeTransfer.DEPOSIT.name());
         depositRequest = new DepositRequest(1L, 200);
         deposit1 = new Deposit(depositRequest);
@@ -153,7 +154,6 @@ public class OperationServiceTest extends BankBaseTest {
         assertNotNull(transferResponse);
     }
 
-
     @Test
     public void transferTest_InvalidValue() {
         transferRequest.setValue(300);
@@ -194,5 +194,4 @@ public class OperationServiceTest extends BankBaseTest {
         assertNotNull(transactions);
 
     }
-
 }

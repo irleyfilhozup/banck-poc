@@ -4,23 +4,23 @@ import com.example.bankpoc.exception.BusinessException;
 
 public class ValidCPF {
 
-    public static void check(String cpfNumber) {
-         String cpf = cleanCPF(cpfNumber);
+    private ValidCPF() {
+    }
 
-        if (!isCPFValid(cpf)) {
-            throw new BusinessException("CPF Invalido","cpf");
+    public static void check(String cpfNumber) {
+        if (!isCPFValid(cleanCPF(cpfNumber))) {
+            throw new BusinessException("cpf","CPF Invalido");
         }
     }
 
-    public static String cleanCPF(String cpf) {
-
+    private static String cleanCPF(String cpf) {
         return cpf.trim().replace(" ", "").replace(",", "")
                 .replace(".", "").replace("-", "");
     }
 
-    public static boolean isCPFValid(final String CPF) {
-        if (simpleCheckNotValid(CPF))
-            return (false);
+    private static boolean isCPFValid(final String CPF) {
+        if (verifiesIfCpfHasElevenDigits(CPF))
+            return false;
 
         char dig10;
         char dig11;
@@ -30,41 +30,31 @@ public class ValidCPF {
         int num;
         int peso;
 
-        try {
-            sm = 0;
-            peso = 10;
-            for (i = 0; i < 9; i++) {
-                num = CPF.charAt(i) - 48;
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-            r = 11 - (sm % 11);
-            if ((r == 10) || (r == 11))
-                dig10 = '0';
-            else
-                dig10 = (char) (r + 48);
-            sm = 0;
-            peso = 11;
-            for (i = 0; i < 10; i++) {
-                num = CPF.charAt(i) - 48;
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-            r = 11 - (sm % 11);
-            dig11 = ((r == 10) || (r == 11)) ? '0' : (char) (r + 48);
-            return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
-
-        } catch (Exception erro) {
-            throw new BusinessException("O cpf informado é invalido","cpf");
+        sm = 0;
+        peso = 10;
+        for (i = 0; i < 9; i++) {
+            num = CPF.charAt(i) - 48;
+            sm = sm + (num * peso);
+            peso = peso - 1;
         }
+        r = 11 - (sm % 11);
+        if ((r == 10) || (r == 11))
+            dig10 = '0';
+        else
+            dig10 = (char) (r + 48);
+        sm = 0;
+        peso = 11;
+        for (i = 0; i < 10; i++) {
+            num = CPF.charAt(i) - 48;
+            sm = sm + (num * peso);
+            peso = peso - 1;
+        }
+        r = 11 - (sm % 11);
+        dig11 = ((r == 10) || (r == 11)) ? '0' : (char) (r + 48);
+        return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
     }
 
-    private static boolean simpleCheckNotValid(String cpf) {
-        return (cpf.length() != 11) ||
-                "00000000000".equals(cpf) || "11111111111".equals(cpf) ||
-                "22222222222".equals(cpf) || "33333333333".equals(cpf) ||
-                "44444444444".equals(cpf) || "55555555555".equals(cpf) ||
-                "66666666666".equals(cpf) || "77777777777".equals(cpf) ||
-                "88888888888".equals(cpf) || "99999999999".equals(cpf);
+    private static boolean verifiesIfCpfHasElevenDigits(String cpf) {
+        return (cpf.length() != 11);
     }
 }

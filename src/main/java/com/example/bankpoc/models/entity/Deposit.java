@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 import com.example.bankpoc.models.enums.TypeTransfer;
 import com.example.bankpoc.models.request.DepositRequest;
+import com.example.bankpoc.util.DateHour;
 
 @Entity
 public class Deposit {
@@ -53,8 +54,8 @@ public class Deposit {
         this.value = value;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getDate() {
+        return DateHour.format(date);
     }
 
     public void setDate(LocalDateTime date) {

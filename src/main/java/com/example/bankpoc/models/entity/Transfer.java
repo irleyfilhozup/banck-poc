@@ -1,6 +1,7 @@
 package com.example.bankpoc.models.entity;
 
 import com.example.bankpoc.models.request.TransferRequest;
+import com.example.bankpoc.util.DateHour;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
@@ -65,8 +66,8 @@ public class Transfer {
 		this.value = value;
 	}
 	
-	public LocalDateTime getDate() {
-		return this.date;
+	public String getDate() {
+		return DateHour.format(date);
 	}
 	
 	public void setDate(LocalDateTime date) {

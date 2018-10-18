@@ -3,6 +3,9 @@ package com.example.bankpoc.models.request;
 import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,8 +15,7 @@ public class ClientRequest {
     @NotBlank(message = "O campo deve ser informado")
     private String name;
 
-//    @CPF(message = "O CPF informado está inválido")
-    @NotBlank(message = "O campo deve ser informado")
+    @CPF(message = "O CPF informado está inválido")
     private String cpf;
 
     @JsonCreator(mode = JsonCreator.Mode.DEFAULT)

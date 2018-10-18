@@ -61,38 +61,6 @@ public class ClientServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void createTest_CpfInvalid() {
-        ClientRequest clientRequest2 = new ClientRequest("Roberto Marinho", "321.654.555-22");
-        when(accountService.create(any(Account.class))).thenReturn(account1);
-        when(clientRepository.save(client1)).thenReturn(client1);
-        thrown.expect(BusinessException.class);
-        clientService.create(clientRequest2);
-    }
-
-    @Test
-    public void createTest_CpfInvalid1() {
-        ClientRequest clientRequest2 = new ClientRequest("Roberto Marinho", "321.567.685.01");
-        when(accountService.create(any(Account.class))).thenReturn(account1);
-        when(clientRepository.findByCpf(anyString())).thenReturn(client1);
-        when(clientRepository.save(client1)).thenReturn(client1);
-        thrown.expect(BusinessException.class);
-        clientService.create(clientRequest2);
-
-    }
-
-    @Test
-    public void createTest_CpfInvalid2() {
-        ClientRequest clientRequest2 = new ClientRequest("Roberto Marinho", "321.654.555");
-        when(accountService.create(any(Account.class))).thenReturn(account1);
-        when(clientRepository.save(client1)).thenReturn(client1);
-        try {
-            clientService.create(clientRequest2);
-        }catch (Exception error) {
-            assertEquals("CPF Invalido", error.getMessage());
-        }
-    }
-
-    @Test
     public void findByAccountIdResponseTest_Ok() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(client1);
         ClientResponse clientResponse = clientService.findByAccountIdResponse(1L);

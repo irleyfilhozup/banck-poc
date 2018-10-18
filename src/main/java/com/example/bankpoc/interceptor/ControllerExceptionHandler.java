@@ -1,5 +1,9 @@
 package com.example.bankpoc.interceptor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -18,12 +22,21 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public MessageBuilder processValidationError(MethodArgumentNotValidException exception) {
-        MessageBuilder messageBuilder = new MessageBuilder();
-        messageBuilder.setField(exception.getBindingResult().getFieldError().getField());
-        messageBuilder.setMessage(exception.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return messageBuilder;
+    public List<MessageBuilder> processValidationError(MethodArgumentNotValidException exception) {
+
+        List<MessageBuilder> listErrors = new ArrayList<>();
+        for(int i = 0; i < exception.getBindingResult().getAllErrors().size();i++){
+            listErrors.add(new MessageBuilder(exception.getBindingResult().getFieldErrors().get(i).getField(),//.getFieldError().getField(),
+                    exception.getBindingResult().getAllErrors().get(i).getDefaultMessage()));
+        }
+        return listErrors;
+
+//        MessageBuilder messageBuilder = new MessageBuilder();
+//        messageBuilder.setField(exception.getBindingResult().getFieldError().getField());
+//        messageBuilder.setMessage(exception.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+//        return messageBuilder;
     }
+
 
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

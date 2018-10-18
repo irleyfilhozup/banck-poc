@@ -50,13 +50,17 @@ public class Account {
         return id;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public String getCreatedAt() {
         return DateHour.format(createdAt);
     }
 
     public void deposit(double value) {
         if (value <= 0) {
-            throw new BusinessException("VALOR_INVALIDO","Valor invalido para deposito");
+            throw new BusinessException("VALOR_INVALIDO","Valor invalido para deposito","value");
         }
         this.balance += value;
     }

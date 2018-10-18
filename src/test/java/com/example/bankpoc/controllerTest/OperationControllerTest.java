@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import com.example.bankpoc.api.OperationController;
+import com.example.bankpoc.controller.OperationController;
 import com.example.bankpoc.base.BankBaseTest;
 import com.example.bankpoc.models.entity.Transfer;
 import com.example.bankpoc.models.enums.TypeTransfer;

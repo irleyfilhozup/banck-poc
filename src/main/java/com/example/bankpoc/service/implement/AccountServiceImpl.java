@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.bankpoc.exception.NonExistentException;
+
+import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.repository.AccountRepository;
 import com.example.bankpoc.service.interfaceServ.AccountService;
@@ -21,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     public Account findById(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (!optionalAccount.isPresent())
-            throw new NonExistentException("Conta Inexistente");
+            throw new BusinessException("Conta Inexistente");
         return optionalAccount.get();
     }
 
@@ -38,6 +39,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void checkIfAccountExists(Account account) {
         if (account == null)
-            throw new NonExistentException("Conta Inexistente");
+            throw new BusinessException("Conta Inexistente");
     }
 }

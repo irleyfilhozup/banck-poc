@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import com.example.bankpoc.api.ClientController;
+import com.example.bankpoc.controller.ClientController;
 import com.example.bankpoc.base.BankBaseTest;
-import com.example.bankpoc.models.entity.Client;
 import com.example.bankpoc.models.request.ClientRequest;
 import com.example.bankpoc.models.response.ClientResponse;
 import com.example.bankpoc.service.implement.ClientServiceImpl;
@@ -64,6 +63,17 @@ public class ClientControllerTest extends BankBaseTest {
 
     @Test
     public void createTest_errorCpf() throws Exception {
+        ClientRequest clientRequest1 = new ClientRequest("Joao da Silva", "");
+        when(clientService.create(any(ClientRequest.class))).thenReturn(clientResponse);
+        ObjectMapper mapper = new ObjectMapper();
+        mvc.perform(post("/client/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(clientRequest1)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createTest_ClientExists() throws Exception {
         ClientRequest clientRequest1 = new ClientRequest("Joao da Silva", "");
         when(clientService.create(any(ClientRequest.class))).thenReturn(clientResponse);
         ObjectMapper mapper = new ObjectMapper();

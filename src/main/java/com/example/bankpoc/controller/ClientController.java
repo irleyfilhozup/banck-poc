@@ -1,4 +1,4 @@
-package com.example.bankpoc.api;
+package com.example.bankpoc.controller;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

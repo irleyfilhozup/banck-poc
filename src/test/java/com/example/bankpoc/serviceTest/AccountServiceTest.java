@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import com.example.bankpoc.base.BankBaseTest;
-import com.example.bankpoc.exception.NonExistentException;
+import com.example.bankpoc.exception.BusinessException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.repository.AccountRepository;
 import com.example.bankpoc.service.implement.AccountServiceImpl;
@@ -52,7 +52,7 @@ public class AccountServiceTest extends BankBaseTest {
         try {
             accountService.findById(1L);
         }
-        catch (NonExistentException exception) {
+        catch (BusinessException exception) {
             assertEquals("Conta Inexistente",exception.getMessage());
         }
     }
@@ -77,7 +77,7 @@ public class AccountServiceTest extends BankBaseTest {
         try {
             accountService.checkIfAccountExists(account);
         }
-        catch (NonExistentException exception) {
+        catch (BusinessException exception) {
             assertEquals("Conta Inexistente",exception.getMessage());
         }
     }

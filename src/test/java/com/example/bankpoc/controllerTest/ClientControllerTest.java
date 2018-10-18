@@ -73,6 +73,17 @@ public class ClientControllerTest extends BankBaseTest {
     }
 
     @Test
+    public void createTest_ClientExists() throws Exception {
+        ClientRequest clientRequest1 = new ClientRequest("Joao da Silva", "");
+        when(clientService.create(any(ClientRequest.class))).thenReturn(clientResponse);
+        ObjectMapper mapper = new ObjectMapper();
+        mvc.perform(post("/client/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(clientRequest1)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void getTest() throws Exception {
         when(clientService.findByAccountIdResponse((anyLong()))).thenReturn(clientResponse);
         mvc.perform(get("/client/1")

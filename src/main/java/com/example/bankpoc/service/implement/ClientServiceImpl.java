@@ -14,7 +14,6 @@ import com.example.bankpoc.models.response.ClientResponse;
 import com.example.bankpoc.repository.ClientRepository;
 import com.example.bankpoc.service.interfaceServ.AccountService;
 import com.example.bankpoc.service.interfaceServ.ClientService;
-import com.example.bankpoc.util.ValidCPF;
 
 @Component
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -29,7 +28,6 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public ClientResponse create(ClientRequest clientRequest) {
-        ValidCPF.check(clientRequest.getCpf());
         this.checkIfCPFExists(clientRequest.getCpf());
         Account account = accountService.create(new Account(LocalDateTime.now()));
         Client client = new Client();

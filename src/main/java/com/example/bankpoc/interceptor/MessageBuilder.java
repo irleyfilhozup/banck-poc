@@ -9,6 +9,15 @@ public class MessageBuilder {
     private String field;
     private String message;
 
+    public MessageBuilder() {
+
+    }
+
+    public MessageBuilder(String field, String message) {
+        this.field = field;
+        this.message = message;
+    }
+
     public String getField() {
         return field;
     }

@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import com.example.bankpoc.base.BankBaseTest;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NonExistentException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.Client;
 import com.example.bankpoc.models.request.ClientRequest;
@@ -61,6 +62,17 @@ public class ClientServiceTest extends BankBaseTest {
     }
 
     @Test
+    public void createTest_ClientExists() {
+        when(accountService.create(any(Account.class))).thenReturn(account1);
+        when(clientRepository.save(client1)).thenReturn(client1);
+        when(clientRepository.findByCpf(anyString())).thenReturn(client1);
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Cliente já possui cadastro no banco de dados");
+        ClientResponse clientResponse = clientService.create(clientRequest);
+        assertNotNull(clientResponse);
+    }
+
+    @Test
     public void findByAccountIdResponseTest_Ok() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(client1);
         ClientResponse clientResponse = clientService.findByAccountIdResponse(1L);
@@ -71,12 +83,10 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByAccountIdResponseTest_Invalid() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        try {
-            clientService.findByAccountIdResponse(1L);
-        }
-        catch (Exception error) {
-            assertEquals("Conta Inexistente", error.getMessage());
-        }
+        thrown.expect(NonExistentException.class);
+        thrown.expectMessage("Conta Inexistente");
+        clientService.findByAccountIdResponse(1L);
+
     }
 
     @Test
@@ -89,12 +99,9 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByAccountIdTest_NotFound() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        try {
-            clientService.findByAccountId(2L);
-        }
-        catch (Exception error) {
-            assertEquals("Conta Inexistente", error.getMessage());
-        }
+        thrown.expect(NonExistentException.class);
+        thrown.expectMessage("Conta Inexistente");
+        clientService.findByAccountId(2L);
     }
 
     @Test
@@ -108,12 +115,9 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByCpfTest_NotFound() {
         when(clientRepository.findByCpf(anyString())).thenReturn(null);
-        try {
-            clientService.findByCpf("528.111.272-40");
-        }
-        catch (Exception error) {
-            assertEquals("Conta Inexistente", error.getMessage());
-        }
+        thrown.expect(NonExistentException.class);
+        thrown.expectMessage("Conta Inexistente");
+        clientService.findByCpf("528.111.272-40");
     }
 
     @Test
@@ -133,11 +137,8 @@ public class ClientServiceTest extends BankBaseTest {
         when(clientRepository.save(client1)).thenReturn(client1);
         when(accountService.create(any(Account.class))).thenReturn(account1);
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        try {
-            clientService.update(clientRequest,1L);
-        }
-        catch (Exception error) {
-            assertEquals("Conta Inexistente", error.getMessage());
-        }
+        thrown.expect(NonExistentException.class);
+        thrown.expectMessage("Conta Inexistente");
+        clientService.update(clientRequest,1L);
     }
 }

@@ -59,10 +59,11 @@ public class Account {
     }
 
     public void deposit(double value) {
-        if (value <= 0) {
-            throw new BusinessException("VALOR_INVALIDO","Valor invalido para deposito","value");
-        }
         this.balance += value;
+    }
+
+    public void cashOut(double value) {
+        this.balance -= value;
     }
 
     @Override
@@ -72,9 +73,5 @@ public class Account {
                 ", createdAt=" + createdAt +
                 ", balance=" + balance +
                 '}';
-    }
-
-    public void cashOut(double value) {
-        this.balance -= value;
     }
 }

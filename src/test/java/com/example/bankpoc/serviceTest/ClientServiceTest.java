@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import com.example.bankpoc.base.BankBaseTest;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NotFoundException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.Client;
 import com.example.bankpoc.models.request.ClientRequest;
@@ -82,7 +83,7 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByAccountIdResponseTest_Invalid() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        thrown.expect(BusinessException.class);
+        thrown.expect(NotFoundException.class);
         thrown.expectMessage("Conta Inexistente");
         clientService.findByAccountIdResponse(1L);
 
@@ -98,7 +99,7 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByAccountIdTest_NotFound() {
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        thrown.expect(BusinessException.class);
+        thrown.expect(NotFoundException.class);
         thrown.expectMessage("Conta Inexistente");
         clientService.findByAccountId(2L);
     }
@@ -114,7 +115,7 @@ public class ClientServiceTest extends BankBaseTest {
     @Test
     public void findByCpfTest_NotFound() {
         when(clientRepository.findByCpf(anyString())).thenReturn(null);
-        thrown.expect(BusinessException.class);
+        thrown.expect(NotFoundException.class);
         thrown.expectMessage("Conta Inexistente");
         clientService.findByCpf("528.111.272-40");
     }
@@ -136,7 +137,7 @@ public class ClientServiceTest extends BankBaseTest {
         when(clientRepository.save(client1)).thenReturn(client1);
         when(accountService.create(any(Account.class))).thenReturn(account1);
         when(clientRepository.findByAccountId(anyLong())).thenReturn(null);
-        thrown.expect(BusinessException.class);
+        thrown.expect(NotFoundException.class);
         thrown.expectMessage("Conta Inexistente");
         clientService.update(clientRequest,1L);
     }

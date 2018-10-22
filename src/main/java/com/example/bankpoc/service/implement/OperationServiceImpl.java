@@ -55,6 +55,7 @@ public class OperationServiceImpl implements OperationService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public DepositResponse deposit(DepositRequest depositRequest) {
+        this.validValueTransaction(depositRequest.getValue());
         Account account = accountService.findById(depositRequest.getAccountId());
         accountService.checkIfAccountExists(account);
         account.deposit(depositRequest.getValue());
@@ -68,6 +69,7 @@ public class OperationServiceImpl implements OperationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public CashoutResponse cashOut(CashoutRequest cashoutRequest) {
         Account account = accountService.findById(cashoutRequest.getAccountId());
+        this.validValueTransaction(cashoutRequest.getValue());
         this.validValueCashout(account, cashoutRequest.getValue());
         account.cashOut(cashoutRequest.getValue());
         CashOut cashOut = cashOutService.create(cashoutRequest);
@@ -80,6 +82,7 @@ public class OperationServiceImpl implements OperationService {
     @Transactional(propagation = Propagation.REQUIRED)
     public TransferResponse transfer(TransferRequest transferRequest) {
         validTransfer(transferRequest);
+        this.validValueTransaction(transferRequest.getValue());
         Account accountDeposit = accountService.findById(transferRequest.getDepositAccountid());
         Account accountRecipient = accountService.findById(transferRequest.getRecipientAccountid());
         validValueTransfer(accountDeposit, transferRequest.getValue());
@@ -113,11 +116,16 @@ public class OperationServiceImpl implements OperationService {
 
     private void validValueTransfer(Account accountDeposit, double value) {
         if(accountDeposit.getBalance()<value)
-            throw new BusinessException("Saldo Insuficiente", "value");
+            throw new BusinessException("VALOR_INVALIDO_TRANSFERENCIA","Saldo Insuficiente", "value");
     }
 
     private void validValueCashout(Account account, double value) {
         if(account.getBalance()<value)
-            throw new BusinessException("Valor Invalido para saque","value");
+            throw new BusinessException("VALOR_INVALIDO_SAQUE","Valor Inválido para saque","value");
+    }
+
+    private void validValueTransaction(double value) {
+        if(value < 1)
+            throw new BusinessException("VALOR_INVALIDO","Valor Inválido para transações","value");
     }
 }

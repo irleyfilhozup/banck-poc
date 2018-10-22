@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NotFoundException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.Client;
 import com.example.bankpoc.models.request.ClientRequest;
@@ -84,6 +85,6 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void checkIfClientNotExists(Client client) {
         if (client == null)
-            throw new BusinessException("Conta Inexistente");
+            throw new NotFoundException("Conta Inexistente");
     }
 }

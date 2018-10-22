@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NotFoundException;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -41,4 +42,17 @@ public class ControllerExceptionHandler {
         messageBuilder.setMessage(exception.getMessage());
         return messageBuilder;
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public MessageBuilder processValidationErrorInternNotFound(NotFoundException exception) {
+        MessageBuilder messageBuilder = new MessageBuilder();
+        messageBuilder.setField(exception.getField());
+        messageBuilder.setTitle(exception.getError());
+        messageBuilder.setMessage(exception.getMessage());
+        return messageBuilder;
+    }
+
+
 }

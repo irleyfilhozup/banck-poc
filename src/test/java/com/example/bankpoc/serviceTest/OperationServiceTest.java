@@ -71,7 +71,6 @@ public class OperationServiceTest extends BankBaseTest {
     private List<CashOut> cashOuts;
     private List<Transfer> transfers;
 
-
     @Before
     public void setUp() {
         client1 = new Client("Marcio Araujo","526.250.931-29");
@@ -122,6 +121,22 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
+    public void depositTest_ValueInvalid() {
+        when(accountService.findById(anyLong())).thenReturn(account1);
+        when(depositService.create(any(Deposit.class))).thenReturn(deposit1);
+        DepositRequest depositRequest1 = new DepositRequest(1L, -200);
+        try {
+            operationService.deposit(depositRequest1);
+        }
+        catch (BusinessException exception) {
+            assertEquals(account1.getCreatedAt(),account1.getCreatedAt());
+            assertEquals(account1.toString(),account1.toString());
+            assertEquals("Valor Inválido para transações",exception.getMessage());
+        }
+
+    }
+
+    @Test
     public void cashOutTest_Ok() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(cashOutService.create(any(CashoutRequest.class))).thenReturn(cashOut);
@@ -138,7 +153,7 @@ public class OperationServiceTest extends BankBaseTest {
             operationService.cashOut(cashoutRequest1);
         }
         catch (BusinessException exception) {
-            assertEquals("Valor Invalido para saque",exception.getError());
+            assertEquals("Valor Inválido para saque",exception.getMessage());
         }
     }
 
@@ -161,7 +176,21 @@ public class OperationServiceTest extends BankBaseTest {
             operationService.transfer(transferRequest);
         }
         catch (BusinessException exception) {
-            assertEquals("Saldo Insuficiente",exception.getError());
+            assertEquals("Saldo Insuficiente",exception.getMessage());
+        }
+    }
+
+    @Test
+    public void transferTest_NegativeValue() {
+        transferRequest.setValue(-300);
+        when(accountService.findById(anyLong())).thenReturn(account1);
+        when(accountService.findById(anyLong())).thenReturn(account2);
+        when(transferService.transfer(any(TransferRequest.class))).thenReturn(transfer);
+        try {
+            operationService.transfer(transferRequest);
+        }
+        catch (BusinessException exception) {
+            assertEquals("Valor Inválido para transações",exception.getMessage());
         }
     }
 

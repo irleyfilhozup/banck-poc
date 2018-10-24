@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,20 +37,30 @@ public class DepositServiceTest extends BankBaseTest {
     @Before
     public void setUp() {
         depositRequest = new DepositRequest(1L, 200);
+        depositRequest.setAccountId(1L);
+        depositRequest.setValue(200);
         deposit = new Deposit(depositRequest);
+        deposit.setId(1L);
+        deposit.setDate(LocalDateTime.now());
+        deposit.setId_account(1L);
+        deposit.setValue(200);
         deposits = new ArrayList<>();
         deposits.add(deposit);
     }
 
     @Test
-    public void createTest() {
+    public void createTest_WhenPassedValidDataReturnDeposit() {
         when(depositRepository.save(any(Deposit.class))).thenReturn(deposit);
         Deposit depositresp = depositService.create(deposit);
-        assertNotNull(depositresp);
+        assertEquals(deposit.getId(), depositresp.getId());
+        assertEquals(deposit.getDate(), depositresp.getDate());
+        assertEquals(deposit.getValue(), depositresp.getValue(),0);
+        assertEquals(deposit.getId_account(), depositresp.getId_account());
+        assertEquals(deposit.toString(), depositresp.toString());
     }
 
     @Test
-    public void findCustomerDepositsTest() {
+    public void findCustomerDepositsTest_WhenPassedValidDataReturnListDeposit() {
         when(depositRepository.findCustomerDeposits(anyLong())).thenReturn(deposits);
         List<Deposit> list = depositService.findCustomerDeposits(1L);
         assertEquals(1,list.size());

@@ -17,6 +17,7 @@ import org.mockito.Mock;
 
 import com.example.bankpoc.base.BankBaseTest;
 import com.example.bankpoc.exception.BusinessException;
+import com.example.bankpoc.exception.NotFoundException;
 import com.example.bankpoc.models.entity.Account;
 import com.example.bankpoc.models.entity.CashOut;
 import com.example.bankpoc.models.entity.Client;
@@ -104,7 +105,7 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void getBalanceTest_Ok() {
+    public void getBalanceTest__WhenPassedValidDataReturnBalance() {
         when(clientService.findByAccountId(anyLong())).thenReturn(client1);
         when(accountService.findById(anyLong())).thenReturn(account1);
 
@@ -113,7 +114,7 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void depositTest_Ok() {
+    public void depositTest__WhenPassedValidDataReturnDepositResponse() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(depositService.create(any(Deposit.class))).thenReturn(deposit1);
         DepositResponse depositResponse1 = operationService.deposit(depositRequest);
@@ -121,23 +122,20 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void depositTest_ValueInvalid() {
+    public void depositTest_WhenValueNegativeReturnBusinessException() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(depositService.create(any(Deposit.class))).thenReturn(deposit1);
         DepositRequest depositRequest1 = new DepositRequest(1L, -200);
-        try {
-            operationService.deposit(depositRequest1);
-        }
-        catch (BusinessException exception) {
-            assertEquals(account1.getCreatedAt(),account1.getCreatedAt());
-            assertEquals(account1.toString(),account1.toString());
-            assertEquals("Valor Inválido para transações",exception.getMessage());
-        }
+
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Valor Inválido para transações");
+
+        operationService.deposit(depositRequest1);
 
     }
 
     @Test
-    public void cashOutTest_Ok() {
+    public void cashOutTest_WhenPassedValidDataReturnCashoutResponse() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(cashOutService.create(any(CashoutRequest.class))).thenReturn(cashOut);
         CashoutResponse cashoutResponse = operationService.cashOut(cashoutRequest);
@@ -145,20 +143,17 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void cashOutTest_Error() {
+    public void cashOutTest_WhenValueInvalidReturnBusinessException() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(cashOutService.create(any(CashoutRequest.class))).thenReturn(cashOut);
         CashoutRequest cashoutRequest1 = new CashoutRequest(1L, 300);
-        try {
-            operationService.cashOut(cashoutRequest1);
-        }
-        catch (BusinessException exception) {
-            assertEquals("Valor Inválido para saque",exception.getMessage());
-        }
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Valor Inválido para saque");
+        operationService.cashOut(cashoutRequest1);
     }
 
     @Test
-    public void transferTest_Ok() {
+    public void transferTest_WhenPassedValidDataReturnCashoutResponse() {
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(accountService.findById(anyLong())).thenReturn(account2);
         when(transferService.transfer(any(TransferRequest.class))).thenReturn(transfer);
@@ -167,50 +162,42 @@ public class OperationServiceTest extends BankBaseTest {
     }
 
     @Test
-    public void transferTest_InvalidValue() {
+    public void transferTest___WhenValueInvalidReturnBusinessException() {
         transferRequest.setValue(300);
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(accountService.findById(anyLong())).thenReturn(account2);
         when(transferService.transfer(any(TransferRequest.class))).thenReturn(transfer);
-        try {
-            operationService.transfer(transferRequest);
-        }
-        catch (BusinessException exception) {
-            assertEquals("Saldo Insuficiente",exception.getMessage());
-        }
+
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Saldo Insuficiente");
+        operationService.transfer(transferRequest);
     }
 
     @Test
-    public void transferTest_NegativeValue() {
+    public void transferTest_WhenValueNegativeReturnBusinessException() {
         transferRequest.setValue(-300);
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(accountService.findById(anyLong())).thenReturn(account2);
         when(transferService.transfer(any(TransferRequest.class))).thenReturn(transfer);
-        try {
-            operationService.transfer(transferRequest);
-        }
-        catch (BusinessException exception) {
-            assertEquals("Valor Inválido para transações",exception.getMessage());
-        }
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Valor Inválido para transações");
+        operationService.transfer(transferRequest);
     }
 
     @Test
-    public void transferTest_InvalidTransaction() {
+    public void transferTest_WhenIdEquals() {
         transferRequest.setDepositAccountid(1L);
         transferRequest.setRecipientAccountid(1L);
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(transferService.transfer(any(TransferRequest.class))).thenReturn(transfer);
-        try {
-            operationService.transfer(transferRequest);
-        }
-        catch (BusinessException exception) {
-            assertEquals("Não é possivel fazer uma transação para a mesma conta",exception.getMessage());
-        }
+        thrown.expect(BusinessException.class);
+        thrown.expectMessage("Não é possivel fazer uma transação para a mesma conta");
+        operationService.transfer(transferRequest);
     }
 
     @Test
-    public void getTransfers() {
+    public void getTransfersTest_WhenPassedValidDataReturnListTransactions() {
 
         when(accountService.findById(anyLong())).thenReturn(account1);
         when(transferService.getTransfers(anyLong())).thenReturn(transfers);
@@ -218,6 +205,5 @@ public class OperationServiceTest extends BankBaseTest {
         when(cashOutService.findCustomeCashOuts(anyLong())).thenReturn(cashOuts);
         List<Transfer> transactions = operationService.getTransfers(1L);
         assertNotNull(transactions);
-
     }
 }

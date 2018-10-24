@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Client {
@@ -18,8 +19,10 @@ public class Client {
     @Column(unique = true)
     private String cpf;
 
+
     @Column(name = "ID_ACCOUNT")
     private Long accountId;
+
     private String name;
 
     @Column(name = "DATE_CREATION")

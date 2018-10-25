@@ -12,10 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ClientRequest {
 
     @Pattern(regexp = "^.{3,255}$", message = "O campo deve conter no mínimo 3 caracteres")
-    @NotBlank(message = "O campo deve ser informado")
+    @NotBlank(message = "O campo deve nome ser informado")
     private String name;
 
     @CPF(message = "O CPF informado está inválido")
+    @NotBlank(message = "O campo deve cpf ser informado")
     private String cpf;
 
     @JsonCreator(mode = JsonCreator.Mode.DEFAULT)

@@ -1,0 +1,5 @@
+com/example/repository/ClientRepository.class
+com/example/repository/CashOutRepository.class
+com/example/repository/TransferRepository.class
+com/example/repository/DepositRepository.class
+com/example/repository/AccountRepository.class

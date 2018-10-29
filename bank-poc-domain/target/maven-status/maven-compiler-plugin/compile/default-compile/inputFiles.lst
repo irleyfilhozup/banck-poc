@@ -1,0 +1,17 @@
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/response/TransferResponse.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/response/CashoutResponse.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/request/CashoutRequest.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/Account.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/response/ClientResponse.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/util/DateHour.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/Transaction.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/CashOut.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/Client.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/request/ClientRequest.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/Deposit.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/request/DepositRequest.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/enums/TypeTransfer.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/entity/Transfer.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/request/TransferRequest.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/response/TransfersResponse.java
+/home/zup/workspace/bank-poc/bank-poc-domain/src/main/java/com/example/domain/response/DepositResponse.java

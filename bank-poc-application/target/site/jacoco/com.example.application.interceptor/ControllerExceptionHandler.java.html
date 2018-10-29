@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControllerExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bank-poc-application</a> &gt; <a href="index.source.html" class="el_package">com.example.application.interceptor</a> &gt; <span class="el_source">ControllerExceptionHandler.java</span></div><h1>ControllerExceptionHandler.java</h1><pre class="source lang-java linenums">package com.example.application.interceptor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import com.example.application.exception.BusinessException;
+import com.example.application.exception.NotFoundException;
+
+@ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
+<span class="fc" id="L19">public class ControllerExceptionHandler {</span>
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public List&lt;MessageBuilder&gt; processValidationError(MethodArgumentNotValidException exception) {
+
+<span class="nc" id="L26">        List&lt;MessageBuilder&gt; listErrors = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        for(int i = 0; i &lt; exception.getBindingResult().getAllErrors().size();i++){</span>
+<span class="nc" id="L28">            listErrors.add(new MessageBuilder(exception.getBindingResult().getFieldErrors().get(i).getField(),</span>
+<span class="nc" id="L29">                    exception.getBindingResult().getAllErrors().get(i).getDefaultMessage()));</span>
+        }
+<span class="nc" id="L31">        return listErrors;</span>
+    }
+
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public MessageBuilder processValidationErrorIntern(BusinessException exception) {
+<span class="fc" id="L39">        MessageBuilder messageBuilder = new MessageBuilder();</span>
+<span class="fc" id="L40">        messageBuilder.setField(exception.getField());</span>
+<span class="fc" id="L41">        messageBuilder.setTitle(exception.getError());</span>
+<span class="fc" id="L42">        messageBuilder.setMessage(exception.getMessage());</span>
+<span class="fc" id="L43">        return messageBuilder;</span>
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public MessageBuilder processValidationErrorInternNotFound(NotFoundException exception) {
+<span class="fc" id="L50">        MessageBuilder messageBuilder = new MessageBuilder();</span>
+<span class="fc" id="L51">        messageBuilder.setField(exception.getField());</span>
+<span class="fc" id="L52">        messageBuilder.setTitle(exception.getError());</span>
+<span class="fc" id="L53">        messageBuilder.setMessage(exception.getMessage());</span>
+<span class="fc" id="L54">        return messageBuilder;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

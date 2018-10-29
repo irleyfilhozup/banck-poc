@@ -6,7 +6,15 @@
 	<groupId>com.example</groupId>
 	<artifactId>bank-poc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+
+    <modules>
+        <module>bank-poc-application</module>
+        <module>bank-poc-controller</module>
+        <module>bank-poc-service</module>
+        <module>bank-poc-domain</module>
+        <module>bank-poc-repository</module>
+    </modules>
+    <packaging>pom</packaging>
 
 	<name>bank-poc</name>
 	<description>Demo project for Spring Boot</description>
@@ -15,7 +23,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.5.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<!--<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
 	</parent>
 
 	<properties>
@@ -44,25 +52,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4.1212</version>
-		</dependency>
-
-		<dependency>
-			<groupId>br.com.caelum.stella</groupId>
-			<artifactId>caelum-stella-core</artifactId>
-			<version>2.1.2</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.postgresql</groupId>-->
+			<!--<artifactId>postgresql</artifactId>-->
+			<!--<version>9.4.1212</version>-->
+		<!--</dependency>-->
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.application.BankPocApplication</mainClass>
+                </configuration>
+            </plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

@@ -1,25 +1,62 @@
-Bank-poc. Aplicação que simula um banco, permite o cadastro de clientes, depósitos, saque, tranferência, consulta de saldo e extrato da conta. Foi 
-utilizada a linguagem Java para o desenvolvimento do codigo, Postgre para o gerenciamento do banco de dados local, Maven para o gerenciamento das dependências e a inicializaçõa é feita com o Spring boot.
+# Bank-poc
 
-ENDPOINTS:
+É uma aplicação que simula o sistema um banco, permite o cadastro de clientes, e as operações de depósitos, saque, tranferência, consulta de saldo e extrato da conta. Foi utilizada a linguagem Java para o desenvolvimento do codigo, Postgres para o gerenciamento do banco de dados, Maven para o gerenciamento das dependências e a inicializaçõa é feita com o framework Spring boot.
 
-GET "localhost:8080/clients" retorna todos os clientes cadastrados.
+## Regras de Negócio:
+- O saldo da conta nunca poderá ser negativo;
+- Não pode ser possível realizar saque ou transferência quando o saldo na conta é
+insuficiente;
+- A conta de destino deve ser válida;
+- O cliente só poderá ter uma conta (validar por CPF por exemplo);
+- Ao criar a conta na resposta de sucesso deverá constar o Id da conta para futuras movimentações;
+- Ao solicitar um extrato, deverá constar toda movimentação da conta, como
+transferência, depósito e saque;
+- Ao solicitar transferência tanto a conta de destino quanto a de origem devem ser
+válidas;
+- Não pode ser possível realizar uma transferência para você mesmo, ou seja, conta
+de origem não pode ser igual a conta de destino;
+## DER
+![Diagrama de entidade e relacionamento](BankPocDER.png)
 
-GET "localhost:8080/searchClient/2" retorna o cliente de acordo com o id passado na url.
+## Requisitos para executar a aplicação
 
-PUT "localhost:8080/client/update/2" edita o cliente de acordo com o id passado na url e os parâmetros passados em JSON no body na requisição.
-Modelo body da requisição: { "accountId": 2, "name": "Maria Ferreira", "cpf": "333.333.555-98", "date_creation": "2018-09-30T00:00:00.000+0000"}
+A aplicação depende de algumas tecnologias para a execução como:
+  - Java JDK
+  - Maven
+  - Docker
+  - Docker-Compose
+  - PostgreSQL
 
-POST "localhost:8080/client/new" cadastra um novo cliente de acordo com os parâmetros passados em JSON no body na requisição.
-Modelo body da requisição: { "name": "Maria Ferreira", "cpf": "333.333.555-98", "date_creation": "2018-09-30T00:00:00.000+0000"}
 
-POST "localhost:8080/transfer" permite a tranferencia de valores entre as contas dos clientes de acordo com os parâmetros passados em JSON no body na requisição. Modelo body da requisição: { "idRecipient": 11, "idDeposit": 12, "value": 100.00 }
+Após a instalação das dependencias atraves do terminal na pasta raiz do projeto execute o comando:
+```sh
+$ mvn clean install
+```
+Depois digite a instrução abaixo para a alocar o container com o banco de dados:
+```sh
+$ docker-compose up
+```
+Aṕos o passo anterior deve iniciar a aplicação na IDE.
 
-POST "localhost:8080/deposit" permite o deposito para o cliente de acordo com os parâmetros passados em JSON no body na requisição.
-Modelo body da requisição: { "idClient": 11, "value": 200 }
- 
-GET "localhost:8080/balance/11" retorna o saldo na conta do cliente de acordo com o id passado na url.
+Será possivel testar a aplicação pelo endereço:
+```sh
+$ localhost:8080/
+```
+### EndPoints:
+ EndPoints "/client"
 
-POST "localhost:8080/cashOut" permite o saque na conta do cliente de acordo com o id passado na url e os parâmetros passados em JSON no body na requisição. Modelo body da requisição: { "idClient": 12, "value": -500 }
 
-GET "localhost:8080/accountStatement/12" retorna o extrato da conta do cliente de acordo com o id passado na url.
+Serviço | Endereço | Parâmetro
+------------ | ------------- | ------------- 
+Novo Cliente | localhost:8080/client/create | {"name": "Fulano de Tal", "cpf": "111.111.111-11"}
+Consultar Cliente | localhost:8080/client/{id conta} |
+Editar Cliente | localhost:8080/client/update/{id conta} | {"name": "Fulano de Tal", "cpf": "111.111.111-11"}
+
+EndPoints "/operation"
+Serviço | Método | Endereço | Parâmetro
+------------ | ------------ | ------------- | ------------- 
+Saldo | GET | localhost:8080/operation/balance/{id conta} | 
+Deposito | POST | localhost:8080/operation/deposit | {"accountId": 1,"value": 500}
+Saque | POST | localhost:8080/operation/cashout | {"accountId": 2,"value": 140}
+Transferência | POST | localhost:8080/operation/transfer | {"depositAccountid": 1, ,"recipientAccountid": 2, "value": 50.00}
+Extrato | GET | localhost:8080/operation/accountStatement/{accountId} |
